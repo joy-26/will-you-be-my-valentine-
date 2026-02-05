@@ -144,17 +144,19 @@
     }
 
     /* --- CHANGE THIS HERE: Sticker styling --- */
-    .sticker {
-      position: fixed;
-      width: 80px;
-      height: 80px;
-      pointer-events: none;
-      opacity: 0;
-      z-index: 50;
-      object-fit: contain;
-      transition: opacity 0.6s ease;
-    }
+  
 
+    .sticker {
+  position: fixed;
+  width: 120px; /* Made bigger */
+  height: 120px;
+  pointer-events: none;
+  opacity: 0 !important; /* Force hidden initially */
+  z-index: 50;
+  object-fit: contain;
+  transition: opacity 0.6s ease;
+  display: none; /* Extra safety - completely hidden */
+}
     /* Celebration screen */
     #celebration {
       display: none;
@@ -208,16 +210,16 @@
       z-index: 999;
     }
 
-    /* Celebration stickers that fade in one by one */
     .celebration-sticker {
-      position: fixed;
-      width: 100px;
-      height: 100px;
-      object-fit: contain;
-      opacity: 0;
-      z-index: 150;
-      animation: fadeInSticker 0.8s ease-in-out forwards;
-    }
+  position: fixed;
+  width: 130px; /* Made bigger */
+  height: 130px;
+  object-fit: contain;
+  opacity: 0;
+  z-index: 150;
+  animation: fadeInSticker 0.8s ease-in-out forwards;
+  display: none; /* Hidden until Yes is clicked */
+}
 
     @keyframes fadeInSticker {
       from {
@@ -250,12 +252,12 @@
   <img class="sticker" id="stickerA" src="a.png" alt="Sticker A">
   <img class="sticker" id="stickerB" src="b.png" alt="Sticker B">
 
-  <!-- Celebration stickers (appear one by one after Yes) -->
-  <!-- Upload c.png, d.png, e.png, f.png to your repo -->
-  <img class="celebration-sticker" id="stickerC" src="c.png" alt="Sticker C" style="top: 10%; left: 10%;">
-  <img class="celebration-sticker" id="stickerD" src="d.png" alt="Sticker D" style="top: 15%; right: 10%;">
-  <img class="celebration-sticker" id="stickerE" src="e.png" alt="Sticker E" style="bottom: 15%; left: 15%;">
-  <img class="celebration-sticker" id="stickerF" src="f.png" alt="Sticker F" style="bottom: 10%; right: 15%;">
+  <!-- Celebration stickers (appear one by one after Yes around center) -->
+<!-- Upload c.png, d.png, e.png, f.png to your repo -->
+<img class="celebration-sticker" id="stickerC" src="c.png" alt="Sticker C" style="top: 35%; left: 15%;">
+<img class="celebration-sticker" id="stickerD" src="d.png" alt="Sticker D" style="top: 30%; right: 15%;">
+<img class="celebration-sticker" id="stickerE" src="e.png" alt="Sticker E" style="bottom: 35%; left: 20%;">
+<img class="celebration-sticker" id="stickerF" src="f.png" alt="Sticker F" style="bottom: 30%; right: 20%;">
 
   <!-- Big "SHE SAID YES!!!" text -->
   <div id="bigYesText" style="display: none;">SHE SAID YES!!!</div>
@@ -291,7 +293,7 @@
       
       <!-- --- CHANGE THIS HERE: Celebration GIF --- -->
       <!-- GIF URL from your requirement -->
-      <img src="https://media.tenor.com/hvM2XEuVaS4AAAAC/gi-hun-in-ho.gif" alt="Success" class="celebration-gif" id="celebrationGif">
+      <img src="https://media1.tenor.com/m/CMAUbqPnTb4AAAAd/gi-hun-in-ho.gif" alt="Success" class="celebration-gif" id="celebrationGif">
     </div>
   </main>
 
@@ -328,17 +330,18 @@
 
     // --- CHANGE THIS HERE: GIF URLs for each No click ---
     // Use direct GIF URLs or upload to your repo
-    const gifUrls = {
-      1: "https://media.tenor.com/U5H1g55x2cMAAAAC/oh-hell-nah-no.gif", // 1st No
-      2: "https://media.tenor.com/sxH6YHNz7dsAAAAC/omg-what.gif", // 2nd No
-      3: "https://media.tenor.com/lqoJUd2rZUkAAAAC/really-bruh.gif", // 3rd No
-      4: "https://media.tenor.com/lqoJUd2rZUkAAAAC/really-bruh.gif", // 4th No (same as 3rd)
-      5: "https://media.tenor.com/R6ZNsaS05nQAAAAC/shocked-dog-good-dog.gif", // 5th No
-      6: "https://media.tenor.com/AwRjxWQ-WTYAAAAC/banana-crying-cat.gif", // 6th No
-      7: "https://media.tenor.com/AwRjxWQ-WTYAAAAC/banana-crying-cat.gif", // 7th No (same as 6th)
-      8: "https://media.tenor.com/PJhfL4A8rHAAAAAC/why-are-you-serious.gif", // 8th No
-      9: "https://images.meme-arsenal.com/71c0e0900d585e65a5acbd5e47d83cbb.jpg" // 9th No (image)
-    };
+    // --- CHANGE THIS HERE: GIF URLs for each No click ---
+const gifUrls = {
+  1: "https://media1.tenor.com/m/TRxTAkbe39QAAAAd/oh-hell-nah-no.gif",
+  2: "https://media1.tenor.com/m/z4ukCIqmzR8AAAAd/omg-what.gif",
+  3: "https://media1.tenor.com/m/gYw4XiQtMsUAAAAd/really-bruh.gif",
+  4: "https://media1.tenor.com/m/gYw4XiQtMsUAAAAd/really-bruh.gif", // Same as 3rd
+  5: "https://media1.tenor.com/m/5wypIfJTdOkAAAAd/shocked-dog-good-dog.gif",
+  6: "https://media.tenor.com/UNaQFutfOF0AAAAj/banana-crying-cat.gif",
+  7: "https://media.tenor.com/UNaQFutfOF0AAAAj/banana-crying-cat.gif", // Same as 6th - DVD mode starts here
+  8: "https://media1.tenor.com/m/V36VabT3tXAAAAAd/why-are-you-serious.gif",
+  9: "https://images.meme-arsenal.com/71c0e0900d585e65a5acbd5e47d83cbb.jpg"
+};
 
     function handleNo(event) {
       noCount++;
@@ -405,32 +408,34 @@
     }
 
     // Show sticker A at top-right of Yes button
-    function showStickerA() {
-      const yesRect = yesBtn.getBoundingClientRect();
-      stickerA.style.left = `${yesRect.right + 10}px`;
-      stickerA.style.top = `${yesRect.top - 20}px`;
-      stickerA.style.opacity = "1";
-    }
+function showStickerA() {
+  const yesRect = yesBtn.getBoundingClientRect();
+  stickerA.style.display = 'block'; // Make visible
+  stickerA.style.left = `${yesRect.right + 10}px`;
+  stickerA.style.top = `${yesRect.top - 20}px`;
+  stickerA.style.opacity = "1";
+}
 
-    // Show sticker B near last No button position
-    function showStickerB(event) {
-      let clickX, clickY;
-      if (event.clientX !== undefined) {
-        clickX = event.clientX;
-        clickY = event.clientY;
-      } else if (event.touches && event.touches.length > 0) {
-        clickX = event.touches[0].clientX;
-        clickY = event.touches[0].clientY;
-      } else {
-        const noRect = noBtn.getBoundingClientRect();
-        clickX = noRect.left;
-        clickY = noRect.top;
-      }
-      
-      stickerB.style.left = `${clickX - 40}px`;
-      stickerB.style.top = `${clickY - 40}px`;
-      stickerB.style.opacity = "1";
-    }
+// Show sticker B near last No button position
+function showStickerB(event) {
+  let clickX, clickY;
+  if (event.clientX !== undefined) {
+    clickX = event.clientX;
+    clickY = event.clientY;
+  } else if (event.touches && event.touches.length > 0) {
+    clickX = event.touches[0].clientX;
+    clickY = event.touches[0].clientY;
+  } else {
+    const noRect = noBtn.getBoundingClientRect();
+    clickX = noRect.left;
+    clickY = noRect.top;
+  }
+  
+  stickerB.style.display = 'block'; // Make visible
+  stickerB.style.left = `${clickX - 60}px`;
+  stickerB.style.top = `${clickY - 60}px`;
+  stickerB.style.opacity = "1";
+}
 
     // Move No button to random position (before DVD mode)
     function moveNoButtonRandomly() {
@@ -490,23 +495,38 @@
       animationFrame = requestAnimationFrame(animateDVD);
     }
 
-    // Event Listeners for No Button
-    noBtn.addEventListener('mouseover', (e) => {
-      if (!dvdMode) handleNo(e);
-    });
-    
-    noBtn.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      handleNo(e);
-    });
+   // Prevent multiple rapid triggers
+let lastTriggerTime = 0;
 
-    // Also handle click for DVD mode (when it's moving)
-    noBtn.addEventListener('click', (e) => {
-      if (dvdMode) {
-        e.preventDefault();
-        handleNo(e);
-      }
-    });
+// Event Listeners for No Button
+noBtn.addEventListener('mouseover', (e) => {
+  const now = Date.now();
+  if (!dvdMode && (now - lastTriggerTime) > 500) { // 500ms cooldown
+    lastTriggerTime = now;
+    handleNo(e);
+  }
+});
+
+noBtn.addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  const now = Date.now();
+  if ((now - lastTriggerTime) > 500) {
+    lastTriggerTime = now;
+    handleNo(e);
+  }
+});
+
+// Also handle click for DVD mode (when it's moving)
+noBtn.addEventListener('click', (e) => {
+  if (dvdMode) {
+    e.preventDefault();
+    const now = Date.now();
+    if ((now - lastTriggerTime) > 300) {
+      lastTriggerTime = now;
+      handleNo(e);
+    }
+  }
+	});
 
     // Yes Button Click Handler
     yesBtn.addEventListener('click', () => {
@@ -541,10 +561,27 @@
       });
 
       // Show celebration stickers one by one
-      setTimeout(() => document.getElementById('stickerC').style.opacity = '1', 300);
-      setTimeout(() => document.getElementById('stickerD').style.opacity = '1', 600);
-      setTimeout(() => document.getElementById('stickerE').style.opacity = '1', 900);
-      setTimeout(() => document.getElementById('stickerF').style.opacity = '1', 1200);
+// Show celebration stickers one by one around center
+setTimeout(() => {
+  const stickerC = document.getElementById('stickerC');
+  stickerC.style.display = 'block';
+  stickerC.style.opacity = '1';
+}, 300);
+setTimeout(() => {
+  const stickerD = document.getElementById('stickerD');
+  stickerD.style.display = 'block';
+  stickerD.style.opacity = '1';
+}, 600);
+setTimeout(() => {
+  const stickerE = document.getElementById('stickerE');
+  stickerE.style.display = 'block';
+  stickerE.style.opacity = '1';
+}, 900);
+setTimeout(() => {
+  const stickerF = document.getElementById('stickerF');
+  stickerF.style.display = 'block';
+  stickerF.style.opacity = '1';
+}, 1200);
 
       // Repeat confetti at intervals
       setInterval(() => {
