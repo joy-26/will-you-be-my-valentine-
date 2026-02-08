@@ -152,13 +152,16 @@
       pointer-events: none;
     }
     
-    #noBtn.blinking {
-      animation: realBlink 0.3s steps(2, jump-none) infinite;
+    #noBtn.crazy-mode {
+      position: fixed;
+      animation: crazyBounce 0.3s ease-in-out infinite;
     }
     
-    @keyframes realBlink {
-      0%, 49% { opacity: 1; visibility: visible; }
-      50%, 100% { opacity: 0; visibility: hidden; }
+    @keyframes crazyBounce {
+      0%, 100% { transform: scale(1) rotate(0deg); }
+      25% { transform: scale(0.7) rotate(-15deg); }
+      50% { transform: scale(1.3) rotate(0deg); }
+      75% { transform: scale(0.85) rotate(15deg); }
     }
     
     .sticker {
@@ -336,10 +339,12 @@
     let dvdMode = false;
     let moleMode = false;
     let cloneMode = false;
+    let crazyMode = false;
     let dvdX = 0, dvdY = 0;
     let dvdSpeedX = 2, dvdSpeedY = 2;
     let animationFrame;
     let moleInterval;
+    let crazyInterval;
     let cloneButtons = [];
     let yesTextInterval;
     
@@ -353,7 +358,7 @@
       "Comeeeee onnnn",
       "Try now 😋",
       "Find it now 😏",
-      "Oww hell naaa",
+      "Catch me if you can 🏃",
       "Guess which is real",
       "Are you serious 💔",
       "How about now",
@@ -427,14 +432,11 @@
           moveNoButtonToFarCorner();
           break;
         case 10:
-          noBtn.classList.add('blinking');
-          noBtn.style.transform = 'scale(1)';
-          noBtn.style.opacity = '1';
-          moveNoButtonRandomly();
+          startCrazyMode();
           body.style.backgroundColor = "#ffd6dd";
           break;
         case 11:
-          noBtn.classList.remove('blinking');
+          stopCrazyMode();
           startCloneMode();
           break;
         case 12:
@@ -456,7 +458,7 @@
           break;
       }
       
-      if (!dvdMode && !moleMode && !cloneMode && noCount < 8) {
+      if (!dvdMode && !moleMode && !cloneMode && !crazyMode && noCount < 8) {
         moveNoButtonRandomly();
       }
     }
@@ -537,9 +539,6 @@
         setTimeout(() => {
           moveNoButtonRandomly();
           noBtn.classList.remove('hidden');
-          toast.textContent = 'Omg cat clicked! 😹';
-          toast.classList.add('show');
-          setTimeout(() => toast.classList.remove('show'), 1200);
         }, 150);
       }, 950);
     }
@@ -548,11 +547,27 @@
       moleMode = false;
       if (moleInterval) clearInterval(moleInterval);
       noBtn.classList.remove('mole-mode', 'hidden');
-      toast.textContent = 'Oh you got it! 🎉';
     }
     
-    function showToast() {
-      toast.textContent = 'Oh you got it! 🎉';
+    function startCrazyMode() {
+      crazyMode = true;
+      noBtn.classList.add('crazy-mode');
+      noBtn.style.transform = 'scale(1)';
+      noBtn.style.opacity = '1';
+      
+      crazyInterval = setInterval(() => {
+        moveNoButtonRandomly();
+      }, 400);
+    }
+    
+    function stopCrazyMode() {
+      crazyMode = false;
+      if (crazyInterval) clearInterval(crazyInterval);
+      noBtn.classList.remove('crazy-mode');
+    }
+    
+    function showToast(message) {
+      toast.textContent = message;
       toast.classList.add('show');
       setTimeout(() => toast.classList.remove('show'), 1800);
     }
@@ -582,7 +597,7 @@
         if (i === realIndex) {
           const handleRealClick = (e) => {
             if (e.type === 'touchstart') e.preventDefault();
-            showToast();
+            showToast('Oh you got it! 🎉');
             setTimeout(() => handleNo(e), 400);
           };
           clone.addEventListener('click', handleRealClick);
@@ -698,6 +713,9 @@
       const now = Date.now();
       if ((now - lastTriggerTime) > 250) {
         lastTriggerTime = now;
+        if (moleMode) {
+          showToast('Omg cat clicked! 😹');
+        }
         handleNo(e);
       }
     };
@@ -716,8 +734,10 @@
       dvdMode = false;
       moleMode = false;
       cloneMode = false;
+      crazyMode = false;
       if (animationFrame) cancelAnimationFrame(animationFrame);
       if (moleInterval) clearInterval(moleInterval);
+      if (crazyInterval) clearInterval(crazyInterval);
       cloneButtons.forEach(btn => btn.remove());
       
       vibrate();
