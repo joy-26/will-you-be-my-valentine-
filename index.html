@@ -4,20 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Will you be my Valentine?</title>
-  
-  <!-- Confetti Library -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💕</text></svg>">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-
   <style>
     :root {
-      /* --- CHANGE COLORS HERE (Soft, light palette) --- */
-      --bg-start: #fff5f7;
-      --bg-frustrated: #ffe5e5;
-      --yes-color: #ffb3c6;
-      --no-color: #f0f0f0;
-      --text-main: #2d2d2d;
-      --text-sub: #6b6b6b;
+      --bg-start: #faf5f8;
+      --bg-frustrated-1: #ffe8ec;
+      --bg-frustrated-2: #ffd6dd;
+      --bg-frustrated-3: #ffc5d0;
+      --yes-color: #ff9ebc;
+      --no-color: #f5f5f5;
+      --text-main: #1a1a1a;
+      --text-sub: #666;
       --card-bg: #ffffff;
+      --canvas-bg: #f9f4f7;
     }
 
     * { 
@@ -32,177 +32,167 @@
       justify-content: center;
       align-items: center;
       background-color: var(--bg-start);
-      transition: background-color 0.8s ease;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      transition: background-color 1s ease;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
       overflow: hidden;
     }
 
-    /* Main white card container */
     .card {
-      width: min(600px, 95vw);
+      width: 96vw;
+      max-width: 650px;
       background: var(--card-bg);
-      padding: 50px 30px;
-      border-radius: 25px;
+      padding: 40px 25px;
+      border-radius: 30px;
       text-align: center;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+      box-shadow: 0 15px 60px rgba(0,0,0,0.06);
       position: relative;
       z-index: 10;
     }
 
-    /* --- CHANGE THIS HERE: White canvas for GIF (prevents small GIFs from looking bad) --- */
     .gif-container {
-      width: 280px;
-      height: 280px;
+      width: min(380px, 90vw);
+      height: 260px;
       margin: 0 auto 30px;
-      background: #fafafa;
-      border-radius: 20px;
+      background: var(--canvas-bg);
+      border-radius: 24px;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      border: 2px solid #f0f0f0;
+      border: 3px solid #f0eaed;
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.03);
     }
 
-    /* Main character GIF */
     .character-img {
       max-width: 100%;
       max-height: 100%;
       object-fit: contain;
     }
 
-    /* --- CHANGE THIS HERE: Main title --- */
     h1 {
-      font-size: 2.2rem;
-      margin: 15px 0;
+      font-size: clamp(1.8rem, 5vw, 2.4rem);
+      margin: 20px 0 15px;
       color: var(--text-main);
-      font-weight: 600;
+      font-weight: 700;
+      letter-spacing: -0.5px;
     }
 
-    /* --- CHANGE THIS HERE: Subtitle that changes on each No --- */
     #subtitle {
-      font-size: 1.3rem;
+      font-size: clamp(1.25rem, 4vw, 1.5rem);
       color: var(--text-sub);
-      min-height: 1.8em;
-      margin-bottom: 40px;
+      min-height: 2em;
+      margin-bottom: 35px;
       font-style: italic;
-      font-weight: 400;
+      font-weight: 500;
+      line-height: 1.4;
     }
 
-    /* Button container */
     .btn-container {
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 30px;
-      min-height: 100px;
+      gap: 25px;
+      min-height: 120px;
       position: relative;
     }
 
     button {
-      padding: 18px 40px;
+      padding: 20px 45px;
       font-size: 20px;
-      font-weight: 600;
+      font-weight: 700;
       border: none;
-      border-radius: 50px;
+      border-radius: 60px;
       cursor: pointer;
       transition: all 0.3s ease;
       touch-action: manipulation;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      letter-spacing: 0.3px;
     }
 
-    /* --- CHANGE THIS HERE: Yes button styling --- */
     #yesBtn {
-      background-color: var(--yes-color);
+      background: linear-gradient(135deg, var(--yes-color) 0%, #ffb3cc 100%);
       color: white;
       z-index: 100;
       position: relative;
-      transform-origin: center center; /* Grows from center initially */
+      transform-origin: center center;
     }
 
-    #yesBtn:hover {
-      background-color: #ff9eb5;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(255, 179, 198, 0.4);
-    }
-
-    /* --- CHANGE THIS HERE: No button styling (will move like DVD screensaver) --- */
     #noBtn {
       background-color: var(--no-color);
-      color: #555;
+      color: #666;
       position: relative;
       z-index: 90;
     }
 
-    #noBtn:hover {
-      background-color: #e8e8e8;
-    }
-
-    /* When No button starts bouncing (DVD mode) */
     #noBtn.bouncing {
       position: fixed;
-      transition: none; /* Remove transitions for smooth animation */
+      transition: none;
     }
 
-    /* --- CHANGE THIS HERE: Sticker styling --- */
-  
-
     .sticker {
-  position: fixed;
-  width: 120px; /* Made bigger */
-  height: 120px;
-  pointer-events: none;
-  opacity: 0 !important; /* Force hidden initially */
-  z-index: 50;
-  object-fit: contain;
-  transition: opacity 0.6s ease;
-  display: none; /* Extra safety - completely hidden */
-}
-    /* Celebration screen */
+      position: fixed;
+      width: 130px;
+      height: 130px;
+      pointer-events: none;
+      opacity: 0 !important;
+      z-index: 50;
+      object-fit: contain;
+      transition: opacity 0.7s ease;
+      display: none;
+    }
+
     #celebration {
       display: none;
       position: relative;
     }
 
     #celebration h1 {
-      font-size: 3rem;
+      font-size: clamp(2.5rem, 8vw, 3.5rem);
       color: #ff3b7a;
-      margin-bottom: 20px;
-      animation: pulse 1s ease-in-out infinite;
+      margin-bottom: 25px;
+      animation: celebratePulse 1.2s ease-in-out infinite;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 2px;
     }
 
-    /* --- CHANGE THIS HERE: "SHE SAID YES!!!" big text --- */
     #bigYesText {
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 5rem;
+      font-size: clamp(3rem, 10vw, 5.5rem);
       font-weight: 900;
       color: #ff3b7a;
       z-index: 200;
       opacity: 0;
-      text-shadow: 0 0 20px rgba(255, 59, 122, 0.5);
-      animation: appearDisappear 3s ease-in-out infinite;
+      text-shadow: 0 0 30px rgba(255, 59, 122, 0.4);
+      animation: slideInBounce 2.5s ease-in-out infinite;
+      text-transform: uppercase;
+      letter-spacing: 3px;
     }
 
-    @keyframes appearDisappear {
-      0%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
-      50% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    @keyframes slideInBounce {
+      0% { opacity: 0; transform: translate(-50%, -70%) scale(0.3); }
+      40% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+      50% { transform: translate(-50%, -50%) scale(0.95); }
+      60% { transform: translate(-50%, -50%) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -30%) scale(0.8); }
     }
 
-    @keyframes pulse {
+    @keyframes celebratePulse {
       0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
+      50% { transform: scale(1.08); }
     }
 
     .celebration-gif {
       width: 100%;
-      max-width: 350px;
-      border-radius: 20px;
-      margin-top: 20px;
+      max-width: 400px;
+      border-radius: 24px;
+      margin-top: 25px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
     }
 
-    /* Confetti canvas */
     #confettiCanvas {
       position: fixed;
       inset: 0;
@@ -211,73 +201,44 @@
     }
 
     .celebration-sticker {
-  position: fixed;
-  width: 130px; /* Made bigger */
-  height: 130px;
-  object-fit: contain;
-  opacity: 0;
-  z-index: 150;
-  animation: fadeInSticker 0.8s ease-in-out forwards;
-  display: none; /* Hidden until Yes is clicked */
-}
-
-    @keyframes fadeInSticker {
-      from {
-        opacity: 0;
-        transform: scale(0.5);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
+      position: fixed;
+      width: 130px;
+      height: 130px;
+      object-fit: contain;
+      opacity: 0;
+      z-index: 150;
+      animation: popInSticker 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+      display: none;
     }
 
-    /* Responsive adjustments */
-    @media (max-width: 600px) {
-      h1 { font-size: 1.8rem; }
-      #subtitle { font-size: 1.1rem; }
-      .gif-container { width: 220px; height: 220px; }
-      button { padding: 15px 30px; font-size: 18px; }
-      #bigYesText { font-size: 3rem; }
+    @keyframes popInSticker {
+      0% { opacity: 0; transform: scale(0) rotate(-180deg); }
+      100% { opacity: 1; transform: scale(1) rotate(0deg); }
     }
-
   </style>
 </head>
 <body>
-
   <canvas id="confettiCanvas"></canvas>
+  
+  <img class="sticker" id="stickerA" src="a.png">
+  <img class="sticker" id="stickerB" src="b.png">
 
-  <!-- --- CHANGE THIS HERE: Stickers (will appear at specific No clicks) --- -->
-  <!-- Upload a.png, b.png to your repo -->
-  <img class="sticker" id="stickerA" src="a.png" alt="Sticker A">
-  <img class="sticker" id="stickerB" src="b.png" alt="Sticker B">
+  <img class="celebration-sticker" id="stickerC" src="c.png" style="top: 20%; left: 8%;">
+  <img class="celebration-sticker" id="stickerD" src="d.png" style="top: 15%; right: 8%;">
+  <img class="celebration-sticker" id="stickerE" src="e.png" style="bottom: 20%; left: 12%;">
+  <img class="celebration-sticker" id="stickerF" src="f.png" style="bottom: 18%; right: 10%;">
 
-  <!-- Celebration stickers (appear one by one after Yes around center) -->
-<!-- Upload c.png, d.png, e.png, f.png to your repo -->
-<img class="celebration-sticker" id="stickerC" src="c.png" alt="Sticker C" style="top: 35%; left: 15%;">
-<img class="celebration-sticker" id="stickerD" src="d.png" alt="Sticker D" style="top: 30%; right: 15%;">
-<img class="celebration-sticker" id="stickerE" src="e.png" alt="Sticker E" style="bottom: 35%; left: 20%;">
-<img class="celebration-sticker" id="stickerF" src="f.png" alt="Sticker F" style="bottom: 30%; right: 20%;">
+  <div id="bigYesText" style="display: none;">She Said Yes!!!</div>
 
-  <!-- Big "SHE SAID YES!!!" text -->
-  <div id="bigYesText" style="display: none;">SHE SAID YES!!!</div>
-
-  <!-- --- CHANGE THIS HERE: Audio for celebration (upload crowd-celebration.mp3) --- -->
   <audio id="celebrationSound" src="crowd-celebration.mp3" preload="auto"></audio>
 
   <main class="card" id="mainCard">
     <div id="question-content">
-      
-      <!-- GIF Container with white canvas -->
       <div class="gif-container">
-        <!-- --- CHANGE THIS HERE: Initial GIF (upload 1.gif to repo) --- -->
-        <img src="1.gif" alt="Character" class="character-img" id="mainImg">
+        <img src="1.gif" class="character-img" id="mainImg">
       </div>
       
-      <!-- --- CHANGE THIS HERE: Main question text --- -->
       <h1>Arya, will you be my valentine?</h1>
-      
-      <!-- --- CHANGE THIS HERE: Initial subtitle --- -->
       <p id="subtitle">Please say yes ✨</p>
 
       <div class="btn-container" id="btnContainer">
@@ -286,14 +247,9 @@
       </div>
     </div>
 
-    <!-- Celebration screen -->
     <div id="celebration">
-      <!-- --- CHANGE THIS HERE: Celebration subtitle (animated) --- -->
-      <h1 id="celebrationTitle">HELL YEAH</h1>
-      
-      <!-- --- CHANGE THIS HERE: Celebration GIF --- -->
-      <!-- GIF URL from your requirement -->
-      <img src="https://media1.tenor.com/m/CMAUbqPnTb4AAAAd/gi-hun-in-ho.gif" alt="Success" class="celebration-gif" id="celebrationGif">
+      <h1>Hell Yeah</h1>
+      <img src="https://media1.tenor.com/m/CMAUbqPnTb4AAAAd/gi-hun-in-ho.gif" class="celebration-gif">
     </div>
   </main>
 
@@ -309,135 +265,156 @@
 
     let noCount = 0;
     let yesScale = 1;
-    let dvdMode = false; // Track if No button is in DVD bouncing mode
-    let dvdX = 0, dvdY = 0; // Position
-    let dvdSpeedX = 2, dvdSpeedY = 2; // Initial speed
+    let dvdMode = false;
+    let dvdX = 0, dvdY = 0;
+    let dvdSpeedX = 2, dvdSpeedY = 2;
     let animationFrame;
 
-    // --- CHANGE THIS HERE (SUBTITLES) ---
-    // Subtitle for each No click (index 0 = 1st No, index 1 = 2nd No, etc.)
     const phrases = [
-      "TF CLICK YES!",
+      "WHAAAT!?",
       "Come on!!",
-      "I'll give you chocolates!",
+      "Pleaaaseeee!",
       "I'll take care of you",
       "I will get you MacD fries",
-      "Come on 💔",
+      "I'll give you chocolatesss",
       "You're just enjoying this aren't you?",
-      "I'll keep asking",
-      "Because you are mine heh"
+      "Let's see how much you can deny 😏",
+      "Ab krke dikha",
+      "Oww hell naaa",
+      "Now? 😎",
+      "Are you serious 💔",
+      "COME ON NOWW!!!",
+      "PLEASE! I CAN'T LIVE WITHOUT YOU",
+      "What you gonna do now? Hah 😙"
     ];
 
-    // --- CHANGE THIS HERE: GIF URLs for each No click ---
-    // Use direct GIF URLs or upload to your repo
-    // --- CHANGE THIS HERE: GIF URLs for each No click ---
-const gifUrls = {
-  1: "https://media1.tenor.com/m/TRxTAkbe39QAAAAd/oh-hell-nah-no.gif",
-  2: "https://media1.tenor.com/m/z4ukCIqmzR8AAAAd/omg-what.gif",
-  3: "https://media1.tenor.com/m/gYw4XiQtMsUAAAAd/really-bruh.gif",
-  4: "https://media1.tenor.com/m/gYw4XiQtMsUAAAAd/really-bruh.gif", // Same as 3rd
-  5: "https://media1.tenor.com/m/5wypIfJTdOkAAAAd/shocked-dog-good-dog.gif",
-  6: "https://media.tenor.com/UNaQFutfOF0AAAAj/banana-crying-cat.gif",
-  7: "https://media.tenor.com/UNaQFutfOF0AAAAj/banana-crying-cat.gif", // Same as 6th - DVD mode starts here
-  8: "https://media1.tenor.com/m/V36VabT3tXAAAAAd/why-are-you-serious.gif",
-  9: "https://images.meme-arsenal.com/71c0e0900d585e65a5acbd5e47d83cbb.jpg"
-};
+    const gifUrls = {
+      1: "https://media1.tenor.com/m/TRxTAkbe39QAAAAd/oh-hell-nah-no.gif",
+      2: "https://media1.tenor.com/m/z4ukCIqmzR8AAAAd/omg-what.gif",
+      3: "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExYnl3ZTAzd3hvNmxsNTVjcDBoeDdtZmYwZG43NG5ma2N6Z3l6bm5hbiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/lauLuhNJpTBrjPdTFb/giphy.gif",
+      4: "https://media1.tenor.com/m/gYw4XiQtMsUAAAAd/really-bruh.gif",
+      5: "https://media1.tenor.com/m/5wypIfJTdOkAAAAd/shocked-dog-good-dog.gif",
+      6: "https://media.tenor.com/UNaQFutfOF0AAAAj/banana-crying-cat.gif",
+      7: "https://media.tenor.com/UNaQFutfOF0AAAAj/banana-crying-cat.gif",
+      8: "https://media1.tenor.com/m/V36VabT3tXAAAAAd/why-are-you-serious.gif",
+      9: "https://images.meme-arsenal.com/71c0e0900d585e65a5acbd5e47d83cbb.jpg",
+      10: "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExcGRuMGs0ZnUyc2JjeHN4amc5bDJtd3BodHR5ZmR2MHpleThpem0xbyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/m8fyrgnXwXV5EHw6Lm/giphy.gif	",
+      11: "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExNnlqMGt5eGNiOW9nNG92eTkwaHZjMWt2ODkza2RkdHFobnhpdDVsNCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/43wR1f8QU9KApWKjYt/giphy.gif",
+      12: "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExZHh4djVlaDBvMDFvMXR5dmM1ZDR4NnQwbjAyenI3YTBmMnJjNTY4MSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3orieTfp1MeFLiBQR2/giphy.gif",
+      13: "https://media1.tenor.com/m/gYw4XiQtMsUAAAAd/really-bruh.gif",
+      14: "https://media1.tenor.com/m/wk8ueqUDJBsAAAAC/cat-cry-cute.gif",
+      15: "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExNDgwb3VtM3VoNGl4aTZwcWJlcG90czFnYXJtZXBrOGVxanRvZXM1ayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/78XCFBGOlS6keY1Bil/giphy.gif"
+    };
+
+    function playPopSound() {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.frequency.value = 800;
+      oscillator.type = 'sine';
+      
+      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.1);
+    }
 
     function handleNo(event) {
       noCount++;
       
-      // 1. Update Subtitle
+      playPopSound();
+      
+      if (navigator.vibrate) {
+        navigator.vibrate(50);
+      }
+      
       if (noCount <= phrases.length) {
         subtitle.innerText = phrases[noCount - 1];
       }
 
-      // 2. Change Main GIF
       if (gifUrls[noCount]) {
         mainImg.src = gifUrls[noCount];
       }
 
-      // 3. Grow Yes Button (stops at certain scale to avoid overlap)
-      if (yesScale < 3) { // Grows up to 3x, then can go bigger if needed
+      if (yesScale < 3) {
         yesScale += 0.4;
         yesBtn.style.transform = `scale(${yesScale})`;
-      } else if (yesScale < 6) { // After 3x, can grow to half screen
+      } else if (yesScale < 6) {
         yesScale += 0.3;
         yesBtn.style.transform = `scale(${yesScale})`;
-        yesBtn.style.transformOrigin = 'center center';
       }
 
-      // 4. Specific actions for each No count
       switch(noCount) {
         case 3:
-          // Show sticker A at top-right of Yes button
           showStickerA();
           break;
-        
         case 5:
-          // Background changes to soft reddish
-          body.style.backgroundColor = "#ffe5e5";
+          body.style.backgroundColor = "#ffe8ec";
           break;
-        
         case 6:
-          // Show sticker B at last No position
           showStickerB(event);
           break;
-        
         case 7:
-          // No button starts moving like DVD screensaver
           startDVDMode();
           break;
-        
         case 8:
-          // Increase DVD speed
-          dvdSpeedX = 4;
-          dvdSpeedY = 4;
+          dvdSpeedX = 5;
+          dvdSpeedY = 5;
           break;
-        
-        case 9:
-          // Speed becomes too fast (almost unclickable)
-          dvdSpeedX = 8;
-          dvdSpeedY = 8;
+        case 10:
+          body.style.backgroundColor = "#ffd6dd";
+          break;
+        case 12:
+          dvdSpeedX = 10;
+          dvdSpeedY = 10;
+          break;
+        case 14:
+          body.style.backgroundColor = "#ffc5d0";
+          break;
+        case 15:
+          dvdSpeedX = 20;
+          dvdSpeedY = 20;
           break;
       }
 
-      // 5. Move No button randomly (only before DVD mode)
       if (!dvdMode && noCount < 7) {
         moveNoButtonRandomly();
       }
     }
 
-    // Show sticker A at top-right of Yes button
-function showStickerA() {
-  const yesRect = yesBtn.getBoundingClientRect();
-  stickerA.style.display = 'block'; // Make visible
-  stickerA.style.left = `${yesRect.right + 10}px`;
-  stickerA.style.top = `${yesRect.top - 20}px`;
-  stickerA.style.opacity = "1";
-}
+    function showStickerA() {
+      const yesRect = yesBtn.getBoundingClientRect();
+      stickerA.style.display = 'block';
+      stickerA.style.left = `${yesRect.right + 10}px`;
+      stickerA.style.top = `${yesRect.top - 20}px`;
+      stickerA.style.opacity = "1";
+    }
 
-// Show sticker B near last No button position
-function showStickerB(event) {
-  let clickX, clickY;
-  if (event.clientX !== undefined) {
-    clickX = event.clientX;
-    clickY = event.clientY;
-  } else if (event.touches && event.touches.length > 0) {
-    clickX = event.touches[0].clientX;
-    clickY = event.touches[0].clientY;
-  } else {
-    const noRect = noBtn.getBoundingClientRect();
-    clickX = noRect.left;
-    clickY = noRect.top;
-  }
-  
-  stickerB.style.display = 'block'; // Make visible
-  stickerB.style.left = `${clickX - 60}px`;
-  stickerB.style.top = `${clickY - 60}px`;
-  stickerB.style.opacity = "1";
-}
+    function showStickerB(event) {
+      let clickX, clickY;
+      if (event.clientX !== undefined) {
+        clickX = event.clientX;
+        clickY = event.clientY;
+      } else if (event.touches && event.touches.length > 0) {
+        clickX = event.touches[0].clientX;
+        clickY = event.touches[0].clientY;
+      } else {
+        const noRect = noBtn.getBoundingClientRect();
+        clickX = noRect.left;
+        clickY = noRect.top;
+      }
+      
+      stickerB.style.display = 'block';
+      stickerB.style.left = `${clickX - 65}px`;
+      stickerB.style.top = `${clickY - 65}px`;
+      stickerB.style.opacity = "1";
+    }
 
-    // Move No button to random position (before DVD mode)
     function moveNoButtonRandomly() {
       const maxX = window.innerWidth - noBtn.offsetWidth - 20;
       const maxY = window.innerHeight - noBtn.offsetHeight - 20;
@@ -450,21 +427,17 @@ function showStickerB(event) {
       noBtn.style.top = randomY + 'px';
     }
 
-    // Start DVD screensaver mode for No button
     function startDVDMode() {
       dvdMode = true;
       noBtn.classList.add('bouncing');
       
-      // Set initial position
       const noRect = noBtn.getBoundingClientRect();
       dvdX = noRect.left;
       dvdY = noRect.top;
 
-      // Start animation loop
       animateDVD();
     }
 
-    // DVD bouncing animation
     function animateDVD() {
       if (!dvdMode) return;
 
@@ -473,11 +446,9 @@ function showStickerB(event) {
       const maxX = window.innerWidth - btnWidth;
       const maxY = window.innerHeight - btnHeight;
 
-      // Update position
       dvdX += dvdSpeedX;
       dvdY += dvdSpeedY;
 
-      // Bounce off edges
       if (dvdX <= 0 || dvdX >= maxX) {
         dvdSpeedX *= -1;
         dvdX = Math.max(0, Math.min(dvdX, maxX));
@@ -487,112 +458,71 @@ function showStickerB(event) {
         dvdY = Math.max(0, Math.min(dvdY, maxY));
       }
 
-      // Apply position
       noBtn.style.left = dvdX + 'px';
       noBtn.style.top = dvdY + 'px';
 
-      // Continue animation
       animationFrame = requestAnimationFrame(animateDVD);
     }
 
-   // Prevent multiple rapid triggers
-let lastTriggerTime = 0;
+    let lastTriggerTime = 0;
 
-// Event Listeners for No Button
-noBtn.addEventListener('mouseover', (e) => {
-  const now = Date.now();
-  if (!dvdMode && (now - lastTriggerTime) > 500) { // 500ms cooldown
-    lastTriggerTime = now;
-    handleNo(e);
-  }
-});
+    noBtn.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      const now = Date.now();
+      if ((now - lastTriggerTime) > 400) {
+        lastTriggerTime = now;
+        handleNo(e);
+      }
+    });
 
-noBtn.addEventListener('touchstart', (e) => {
-  e.preventDefault();
-  const now = Date.now();
-  if ((now - lastTriggerTime) > 500) {
-    lastTriggerTime = now;
-    handleNo(e);
-  }
-});
+    noBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const now = Date.now();
+      if ((now - lastTriggerTime) > 400) {
+        lastTriggerTime = now;
+        handleNo(e);
+      }
+    });
 
-// Also handle click for DVD mode (when it's moving)
-noBtn.addEventListener('click', (e) => {
-  if (dvdMode) {
-    e.preventDefault();
-    const now = Date.now();
-    if ((now - lastTriggerTime) > 300) {
-      lastTriggerTime = now;
-      handleNo(e);
-    }
-  }
-	});
-
-    // Yes Button Click Handler
     yesBtn.addEventListener('click', () => {
-      // Stop DVD animation
       dvdMode = false;
       if (animationFrame) cancelAnimationFrame(animationFrame);
 
-      // Hide question content
+      if (navigator.vibrate) {
+        navigator.vibrate([200, 100, 200, 100, 200]);
+      }
+
       document.getElementById('question-content').style.display = 'none';
-      
-      // Show celebration
       document.getElementById('celebration').style.display = 'block';
-      
-      // Hide No button
       noBtn.style.display = 'none';
+      body.style.backgroundColor = "#faf5f8";
 
-      // Reset background
-      body.style.backgroundColor = "#fff5f7";
-
-      // Show big "SHE SAID YES!!!" text
       const bigText = document.getElementById('bigYesText');
       bigText.style.display = 'block';
 
-      // Play celebration sound
       celebrationSound.play().catch(err => console.log("Audio autoplay prevented"));
 
-      // Initial confetti burst
       confetti({
-        particleCount: 150,
-        spread: 70,
-        origin: { y: 0.6 }
+        particleCount: 200,
+        spread: 80,
+        origin: { y: 0.6 },
+        colors: ['#ff9ebc', '#ffb3cc', '#ffc8d9', '#ff85ab']
       });
 
-      // Show celebration stickers one by one
-// Show celebration stickers one by one around center
-setTimeout(() => {
-  const stickerC = document.getElementById('stickerC');
-  stickerC.style.display = 'block';
-  stickerC.style.opacity = '1';
-}, 300);
-setTimeout(() => {
-  const stickerD = document.getElementById('stickerD');
-  stickerD.style.display = 'block';
-  stickerD.style.opacity = '1';
-}, 600);
-setTimeout(() => {
-  const stickerE = document.getElementById('stickerE');
-  stickerE.style.display = 'block';
-  stickerE.style.opacity = '1';
-}, 900);
-setTimeout(() => {
-  const stickerF = document.getElementById('stickerF');
-  stickerF.style.display = 'block';
-  stickerF.style.opacity = '1';
-}, 1200);
+      setTimeout(() => { stickerC.style.display = 'block'; stickerC.style.opacity = '1'; }, 400);
+      setTimeout(() => { stickerD.style.display = 'block'; stickerD.style.opacity = '1'; }, 700);
+      setTimeout(() => { stickerE.style.display = 'block'; stickerE.style.opacity = '1'; }, 1000);
+      setTimeout(() => { stickerF.style.display = 'block'; stickerF.style.opacity = '1'; }, 1300);
 
-      // Repeat confetti at intervals
       setInterval(() => {
         confetti({
-          particleCount: 100,
+          particleCount: 80,
           spread: 60,
-          origin: { y: 0.7 }
+          origin: { y: 0.7 },
+          colors: ['#ff9ebc', '#ffb3cc', '#ffc8d9']
         });
-      }, 3000);
+      }, 2500);
     });
-
   </script>
 </body>
 </html>
