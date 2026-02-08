@@ -94,6 +94,8 @@
       font-style: italic;
       font-weight: 500;
       line-height: 1.4;
+      position: relative;
+      z-index: 220;
     }
     
     .btn-container {
@@ -112,7 +114,7 @@
       border: none;
       border-radius: 55px;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
       touch-action: manipulation;
       box-shadow: 0 5px 18px rgba(0,0,0,0.08);
       letter-spacing: 0.3px;
@@ -131,7 +133,7 @@
       color: #666;
       position: relative;
       z-index: 200;
-      transition: transform 0.2s ease, opacity 0.2s ease;
+      transition: transform 0.15s ease, opacity 0.15s ease;
     }
     
     #noBtn.bouncing {
@@ -146,17 +148,17 @@
     }
     
     #noBtn.hidden {
-      opacity: 0;
+      opacity: 0 !important;
       pointer-events: none;
     }
     
     #noBtn.blinking {
-      animation: blinkFast 0.4s infinite;
+      animation: realBlink 0.3s steps(2, jump-none) infinite;
     }
     
-    @keyframes blinkFast {
-      0%, 100% { opacity: 0; }
-      50% { opacity: 1; }
+    @keyframes realBlink {
+      0%, 49% { opacity: 1; visibility: visible; }
+      50%, 100% { opacity: 0; visibility: hidden; }
     }
     
     .sticker {
@@ -184,6 +186,8 @@
       font-weight: 900;
       text-transform: uppercase;
       letter-spacing: 2px;
+      position: relative;
+      z-index: 170;
     }
     
     #bigYesText {
@@ -191,12 +195,12 @@
       font-size: clamp(2.5rem, 8.5vw, 4.8rem);
       font-weight: 900;
       color: #ff3b7a;
-      z-index: 210;
+      z-index: 180;
       opacity: 0;
       text-shadow: 0 0 25px rgba(255, 59, 122, 0.4);
       text-transform: uppercase;
       letter-spacing: 3px;
-      transition: all 0.5s ease;
+      pointer-events: none;
     }
     
     @keyframes celebratePulse {
@@ -210,6 +214,8 @@
       border-radius: 22px;
       margin-top: 22px;
       box-shadow: 0 8px 35px rgba(0,0,0,0.1);
+      position: relative;
+      z-index: 170;
     }
     
     #confettiCanvas {
@@ -221,8 +227,8 @@
     
     .celebration-sticker {
       position: fixed;
-      width: 125px;
-      height: 125px;
+      width: 100px;
+      height: 100px;
       object-fit: contain;
       opacity: 0;
       z-index: 160;
@@ -237,19 +243,19 @@
     
     .clone-button {
       position: fixed;
-      padding: 18px 42px;
-      font-size: 19px;
+      padding: 12px 28px;
+      font-size: 16px;
       font-weight: 700;
       border: none;
-      border-radius: 55px;
+      border-radius: 45px;
       background-color: #f5f5f5;
       color: #666;
       cursor: pointer;
       touch-action: manipulation;
-      box-shadow: 0 5px 18px rgba(0,0,0,0.08);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
       z-index: 199;
-      opacity: 0.9;
-      letter-spacing: 0.3px;
+      opacity: 0.85;
+      letter-spacing: 0.2px;
     }
     
     .toast {
@@ -259,14 +265,14 @@
       transform: translateX(-50%);
       background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
       color: white;
-      padding: 15px 30px;
+      padding: 12px 25px;
       border-radius: 50px;
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 600;
-      box-shadow: 0 5px 20px rgba(76, 175, 80, 0.4);
+      box-shadow: 0 4px 18px rgba(76, 175, 80, 0.4);
       z-index: 300;
       opacity: 0;
-      transition: opacity 0.4s ease;
+      transition: opacity 0.3s ease;
     }
     
     .toast.show {
@@ -281,16 +287,16 @@
   
   <img class="sticker" id="stickerA" src="a.png">
   <img class="sticker" id="stickerB" src="b.png">
-  <img class="celebration-sticker" id="stickerC" src="c.png" style="top: 28%; left: 12%;">
-  <img class="celebration-sticker" id="stickerD" src="d.png" style="top: 25%; right: 12%;">
-  <img class="celebration-sticker" id="stickerE" src="e.png" style="bottom: 28%; left: 15%;">
-  <img class="celebration-sticker" id="stickerF" src="f.png" style="bottom: 25%; right: 14%;">
+  <img class="celebration-sticker" id="stickerC" src="c.png">
+  <img class="celebration-sticker" id="stickerD" src="d.png">
+  <img class="celebration-sticker" id="stickerE" src="e.png">
+  <img class="celebration-sticker" id="stickerF" src="f.png">
   
   <div id="bigYesText" style="display: none;">She Said Yes!!!</div>
   
   <main class="card" id="mainCard">
     <div id="question-content">
-      <div class="gif-container">
+      <div class="gif-container" id="gifContainer">
         <img src="1.gif" class="character-img" id="mainImg">
       </div>
       
@@ -317,8 +323,13 @@
     const body = document.body;
     const stickerA = document.getElementById('stickerA');
     const stickerB = document.getElementById('stickerB');
+    const stickerC = document.getElementById('stickerC');
+    const stickerD = document.getElementById('stickerD');
+    const stickerE = document.getElementById('stickerE');
+    const stickerF = document.getElementById('stickerF');
     const toast = document.getElementById('toast');
     const bigYesText = document.getElementById('bigYesText');
+    const gifContainer = document.getElementById('gifContainer');
     
     let noCount = 0;
     let yesScale = 1;
@@ -340,12 +351,12 @@
       "Oh Ma Lord",
       "I'll give you chocolates pleaseee",
       "Comeeeee onnnn",
-      "Ab dekh",
-      "Ab krke dikha 😏",
+      "Try now 😋",
+      "Find it now 😏",
       "Oww hell naaa",
-      "Now? 😎",
+      "Guess which is real",
       "Are you serious 💔",
-      "COME ON NOWW!!!",
+      "How about now",
       "PLEASE! I CAN'T LIVE WITHOUT YOU",
       "What you gonna do now? Hah 😙"
     ];
@@ -378,7 +389,6 @@
     
     function handleNo(event) {
       noCount++;
-      
       vibrate();
       
       if (noCount <= phrases.length) {
@@ -418,6 +428,7 @@
           break;
         case 10:
           noBtn.classList.add('blinking');
+          noBtn.style.transform = 'scale(1)';
           noBtn.style.opacity = '1';
           moveNoButtonRandomly();
           body.style.backgroundColor = "#ffd6dd";
@@ -479,10 +490,25 @@
     }
     
     function moveNoButtonRandomly() {
-      const maxX = window.innerWidth - noBtn.offsetWidth - 20;
-      const maxY = window.innerHeight - noBtn.offsetHeight - 20;
-      const randomX = Math.floor(Math.random() * maxX) + 10;
-      const randomY = Math.floor(Math.random() * maxY) + 10;
+      const btnWidth = noBtn.offsetWidth;
+      const btnHeight = noBtn.offsetHeight;
+      const subtitleRect = subtitle.getBoundingClientRect();
+      
+      let randomX, randomY;
+      let attempts = 0;
+      
+      do {
+        randomX = Math.floor(Math.random() * (window.innerWidth - btnWidth - 40)) + 20;
+        randomY = Math.floor(Math.random() * (window.innerHeight - btnHeight - 40)) + 20;
+        attempts++;
+      } while (
+        attempts < 10 &&
+        randomY < subtitleRect.bottom + 20 &&
+        randomY + btnHeight > subtitleRect.top - 20 &&
+        randomX < subtitleRect.right + 20 &&
+        randomX + btnWidth > subtitleRect.left - 20
+      );
+      
       noBtn.style.position = 'fixed';
       noBtn.style.left = randomX + 'px';
       noBtn.style.top = randomY + 'px';
@@ -490,10 +516,10 @@
     
     function moveNoButtonToFarCorner() {
       const corners = [
-        { x: 10, y: 10 },
-        { x: window.innerWidth - noBtn.offsetWidth - 10, y: 10 },
-        { x: 10, y: window.innerHeight - noBtn.offsetHeight - 10 },
-        { x: window.innerWidth - noBtn.offsetWidth - 10, y: window.innerHeight - noBtn.offsetHeight - 10 }
+        { x: 15, y: 15 },
+        { x: window.innerWidth - noBtn.offsetWidth - 15, y: 15 },
+        { x: 15, y: window.innerHeight - noBtn.offsetHeight - 15 },
+        { x: window.innerWidth - noBtn.offsetWidth - 15, y: window.innerHeight - noBtn.offsetHeight - 15 }
       ];
       const corner = corners[Math.floor(Math.random() * corners.length)];
       noBtn.style.position = 'fixed';
@@ -509,75 +535,69 @@
         noBtn.classList.add('hidden');
         
         setTimeout(() => {
-          const maxX = window.innerWidth - noBtn.offsetWidth - 20;
-          const maxY = window.innerHeight - noBtn.offsetHeight - 20;
-          const randomX = Math.floor(Math.random() * maxX) + 10;
-          const randomY = Math.floor(Math.random() * maxY) + 10;
-          
-          noBtn.style.left = randomX + 'px';
-          noBtn.style.top = randomY + 'px';
+          moveNoButtonRandomly();
           noBtn.classList.remove('hidden');
-        }, 100);
-      }, 900);
+          toast.textContent = 'Omg cat clicked! 😹';
+          toast.classList.add('show');
+          setTimeout(() => toast.classList.remove('show'), 1200);
+        }, 150);
+      }, 950);
     }
     
     function stopMoleMode() {
       moleMode = false;
       if (moleInterval) clearInterval(moleInterval);
       noBtn.classList.remove('mole-mode', 'hidden');
+      toast.textContent = 'Oh you got it! 🎉';
     }
     
     function showToast() {
+      toast.textContent = 'Oh you got it! 🎉';
       toast.classList.add('show');
-      setTimeout(() => {
-        toast.classList.remove('show');
-      }, 2000);
+      setTimeout(() => toast.classList.remove('show'), 1800);
     }
     
     function startCloneMode() {
       cloneMode = true;
-      
       cloneButtons.forEach(btn => btn.remove());
       cloneButtons = [];
       
-      const numClones = 6;
-      const realIndex = Math.floor(Math.random() * numClones);
+      const positions = [
+        { x: 20, y: 20 },
+        { x: window.innerWidth - 130, y: 20 },
+        { x: 20, y: window.innerHeight - 80 },
+        { x: window.innerWidth - 130, y: window.innerHeight - 80 },
+        { x: window.innerWidth / 2 - 50, y: window.innerHeight / 2 - 40 },
+      ];
       
-      for (let i = 0; i < numClones; i++) {
+      const realIndex = Math.floor(Math.random() * positions.length);
+      
+      for (let i = 0; i < positions.length; i++) {
         const clone = document.createElement('button');
         clone.textContent = 'No';
         clone.className = 'clone-button';
-        
-        const maxX = window.innerWidth - 150;
-        const maxY = window.innerHeight - 80;
-        const randomX = Math.floor(Math.random() * maxX) + 10;
-        const randomY = Math.floor(Math.random() * maxY) + 10;
-        
-        clone.style.left = randomX + 'px';
-        clone.style.top = randomY + 'px';
+        clone.style.left = positions[i].x + 'px';
+        clone.style.top = positions[i].y + 'px';
         
         if (i === realIndex) {
-          clone.addEventListener('click', (e) => {
+          const handleRealClick = (e) => {
+            if (e.type === 'touchstart') e.preventDefault();
             showToast();
-            setTimeout(() => handleNo(e), 500);
-          });
-          clone.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            showToast();
-            setTimeout(() => handleNo(e), 500);
-          });
+            setTimeout(() => handleNo(e), 400);
+          };
+          clone.addEventListener('click', handleRealClick);
+          clone.addEventListener('touchstart', handleRealClick);
         } else {
-          clone.addEventListener('click', () => {
+          const handleFakeClick = (e) => {
+            if (e.type === 'touchstart') e.preventDefault();
             clone.style.opacity = '0';
-            setTimeout(() => clone.remove(), 300);
-            cloneButtons = cloneButtons.filter(b => b !== clone);
-          });
-          clone.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            clone.style.opacity = '0';
-            setTimeout(() => clone.remove(), 300);
-            cloneButtons = cloneButtons.filter(b => b !== clone);
-          });
+            setTimeout(() => {
+              clone.remove();
+              cloneButtons = cloneButtons.filter(b => b !== clone);
+            }, 250);
+          };
+          clone.addEventListener('click', handleFakeClick);
+          clone.addEventListener('touchstart', handleFakeClick);
         }
         
         document.body.appendChild(clone);
@@ -601,7 +621,6 @@
       dvdSpeedX = speed;
       dvdSpeedY = speed;
       noBtn.classList.add('bouncing');
-      
       const noRect = noBtn.getBoundingClientRect();
       dvdX = noRect.left;
       dvdY = noRect.top;
@@ -630,46 +649,67 @@
       
       noBtn.style.left = dvdX + 'px';
       noBtn.style.top = dvdY + 'px';
-      
       animationFrame = requestAnimationFrame(animateDVD);
     }
     
-    function moveYesText() {
-      const maxX = window.innerWidth - 400;
-      const maxY = window.innerHeight - 200;
-      const randomX = Math.floor(Math.random() * maxX) + 50;
-      const randomY = Math.floor(Math.random() * maxY) + 50;
+    function showYesTextAtRandomPosition() {
+      const positions = [
+        { left: '10%', top: '15%' },
+        { left: '70%', top: '10%' },
+        { left: '15%', top: '70%' },
+        { left: '65%', top: '75%' },
+        { left: '50%', top: '50%', transform: 'translate(-50%, -50%)' },
+        { left: '30%', top: '30%' },
+        { left: '60%', top: '40%' }
+      ];
       
-      bigYesText.style.left = randomX + 'px';
-      bigYesText.style.top = randomY + 'px';
-      bigYesText.style.transform = 'none';
+      const pos = positions[Math.floor(Math.random() * positions.length)];
+      bigYesText.style.left = pos.left;
+      bigYesText.style.top = pos.top;
+      bigYesText.style.transform = pos.transform || 'none';
       
       bigYesText.style.opacity = '1';
       setTimeout(() => {
         bigYesText.style.opacity = '0';
-      }, 1500);
+      }, 1400);
+    }
+    
+    function positionCelebrationStickers() {
+      const rect = gifContainer.getBoundingClientRect();
+      const offset = 15;
+      
+      stickerC.style.left = (rect.left - 50 + offset) + 'px';
+      stickerC.style.top = (rect.top - 50 + offset) + 'px';
+      
+      stickerD.style.left = (rect.right - 50 - offset) + 'px';
+      stickerD.style.top = (rect.top - 50 + offset) + 'px';
+      
+      stickerE.style.left = (rect.left - 50 + offset) + 'px';
+      stickerE.style.top = (rect.bottom - 50 - offset) + 'px';
+      
+      stickerF.style.left = (rect.right - 50 - offset) + 'px';
+      stickerF.style.top = (rect.bottom - 50 - offset) + 'px';
     }
     
     let lastTriggerTime = 0;
     
-    noBtn.addEventListener('touchstart', (e) => {
-      e.preventDefault();
+    const handleNoClick = (e) => {
       if (cloneMode) return;
       const now = Date.now();
-      if ((now - lastTriggerTime) > 300) {
+      if ((now - lastTriggerTime) > 250) {
         lastTriggerTime = now;
         handleNo(e);
       }
+    };
+    
+    noBtn.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      handleNoClick(e);
     });
     
     noBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      if (cloneMode) return;
-      const now = Date.now();
-      if ((now - lastTriggerTime) > 300) {
-        lastTriggerTime = now;
-        handleNo(e);
-      }
+      handleNoClick(e);
     });
     
     yesBtn.addEventListener('click', () => {
@@ -691,9 +731,11 @@
       noBtn.style.display = 'none';
       body.style.backgroundColor = "#faf5f8";
       
+      positionCelebrationStickers();
+      
       bigYesText.style.display = 'block';
-      moveYesText();
-      yesTextInterval = setInterval(moveYesText, 2500);
+      showYesTextAtRandomPosition();
+      yesTextInterval = setInterval(showYesTextAtRandomPosition, 2400);
       
       confetti({
         particleCount: 200,
