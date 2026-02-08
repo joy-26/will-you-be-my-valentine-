@@ -45,18 +45,18 @@
       width: 90vw;
       max-width: 500px;
       background: var(--card-bg);
-      padding: 35px 25px;
+      padding: 35px 25px 45px;
       border-radius: 28px;
       text-align: center;
       box-shadow: 0 12px 50px rgba(0,0,0,0.06);
       position: relative;
       z-index: 10;
-      margin: 0 auto;
     }
 
     .gif-container {
-      width: min(340px, 85vw);
-      height: 200px;
+      width: 360px;
+      max-width: 88vw;
+      height: 220px;
       margin: 0 auto 28px;
       background: var(--canvas-bg);
       border-radius: 20px;
@@ -85,8 +85,9 @@
     #subtitle {
       font-size: clamp(1.15rem, 3.8vw, 1.4rem);
       color: var(--text-sub);
-      min-height: 2em;
-      margin-bottom: 32px;
+      min-height: 2.2em;
+      margin-bottom: 38px;
+      padding: 0 10px;
       font-style: italic;
       font-weight: 500;
       line-height: 1.4;
@@ -127,12 +128,28 @@
       color: #666;
       position: relative;
       z-index: 200;
+      transition: transform 0.3s ease, opacity 0.3s ease;
     }
 
     #noBtn.bouncing {
       position: fixed;
       transition: none;
       z-index: 200;
+    }
+
+    #noBtn.mole-mode {
+      position: fixed;
+      z-index: 200;
+    }
+
+    #noBtn.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    @keyframes fadeInOut {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
     }
 
     .sticker {
@@ -221,6 +238,22 @@
       0% { opacity: 0; transform: scale(0) rotate(-180deg); }
       100% { opacity: 1; transform: scale(1) rotate(0deg); }
     }
+
+    .clone-button {
+      position: fixed;
+      padding: 18px 42px;
+      font-size: 19px;
+      font-weight: 700;
+      border: none;
+      border-radius: 55px;
+      background-color: #f5f5f5;
+      color: #666;
+      cursor: pointer;
+      touch-action: manipulation;
+      box-shadow: 0 5px 18px rgba(0,0,0,0.08);
+      z-index: 199;
+      opacity: 0.9;
+    }
   </style>
 </head>
 <body>
@@ -269,9 +302,13 @@
     let noCount = 0;
     let yesScale = 1;
     let dvdMode = false;
+    let moleMode = false;
+    let cloneMode = false;
     let dvdX = 0, dvdY = 0;
     let dvdSpeedX = 2, dvdSpeedY = 2;
     let animationFrame;
+    let moleInterval;
+    let cloneButtons = [];
 
     const phrases = [
       "WHAAAT!?",
@@ -326,9 +363,7 @@
         
         oscillator.start(audioContext.currentTime);
         oscillator.stop(audioContext.currentTime + 0.15);
-      } catch(e) {
-        console.log('Sound not supported');
-      }
+      } catch(e) {}
     }
 
     function handleNo(event) {
@@ -351,8 +386,8 @@
       if (noCount <= 6) {
         yesScale += 0.15;
         yesBtn.style.transform = `scale(${yesScale})`;
-      } else if (yesScale < 4.5) {
-        yesScale += 0.35;
+      } else if (yesScale < 3.2) {
+        yesScale += 0.3;
         yesBtn.style.transform = `scale(${yesScale})`;
       }
 
@@ -366,21 +401,35 @@
         case 6:
           showStickerB(event);
           break;
-        case 7:
-          startDVDMode();
-          break;
         case 8:
-          dvdSpeedX = 5;
-          dvdSpeedY = 5;
+          startMoleMode();
+          break;
+        case 9:
+          noBtn.style.transform = 'scale(0.7)';
+          stopMoleMode();
+          moveNoButtonRandomly();
           break;
         case 10:
+          noBtn.style.opacity = '0.5';
+          noBtn.style.animation = 'fadeInOut 1.5s infinite';
           body.style.backgroundColor = "#ffd6dd";
           break;
+        case 11:
+          noBtn.style.animation = 'none';
+          noBtn.style.opacity = '1';
+          startCloneMode();
+          break;
         case 12:
-          dvdSpeedX = 10;
-          dvdSpeedY = 10;
+          stopCloneMode();
+          startDVDMode(5);
+          break;
+        case 13:
+          dvdSpeedX = 7;
+          dvdSpeedY = 7;
           break;
         case 14:
+          dvdSpeedX = 9;
+          dvdSpeedY = 9;
           body.style.backgroundColor = "#ffc5d0";
           break;
         case 15:
@@ -389,7 +438,7 @@
           break;
       }
 
-      if (!dvdMode && noCount < 7) {
+      if (!dvdMode && !moleMode && !cloneMode && noCount < 8) {
         moveNoButtonRandomly();
       }
     }
@@ -434,8 +483,94 @@
       noBtn.style.top = randomY + 'px';
     }
 
-    function startDVDMode() {
+    function startMoleMode() {
+      moleMode = true;
+      noBtn.classList.add('mole-mode');
+      
+      moleInterval = setInterval(() => {
+        noBtn.classList.add('hidden');
+        
+        setTimeout(() => {
+          const maxX = window.innerWidth - noBtn.offsetWidth - 20;
+          const maxY = window.innerHeight - noBtn.offsetHeight - 20;
+          const randomX = Math.floor(Math.random() * maxX) + 10;
+          const randomY = Math.floor(Math.random() * maxY) + 10;
+          
+          noBtn.style.left = randomX + 'px';
+          noBtn.style.top = randomY + 'px';
+          noBtn.classList.remove('hidden');
+        }, 100);
+      }, 400);
+    }
+
+    function stopMoleMode() {
+      moleMode = false;
+      if (moleInterval) clearInterval(moleInterval);
+      noBtn.classList.remove('mole-mode', 'hidden');
+    }
+
+    function startCloneMode() {
+      cloneMode = true;
+      
+      cloneButtons.forEach(btn => btn.remove());
+      cloneButtons = [];
+      
+      const realIndex = Math.floor(Math.random() * 3);
+      
+      for (let i = 0; i < 3; i++) {
+        const clone = document.createElement('button');
+        clone.textContent = 'No';
+        clone.className = 'clone-button';
+        
+        const maxX = window.innerWidth - 150;
+        const maxY = window.innerHeight - 80;
+        const randomX = Math.floor(Math.random() * maxX) + 10;
+        const randomY = Math.floor(Math.random() * maxY) + 10;
+        
+        clone.style.left = randomX + 'px';
+        clone.style.top = randomY + 'px';
+        
+        if (i === realIndex) {
+          clone.addEventListener('click', (e) => {
+            handleNo(e);
+          });
+          clone.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            handleNo(e);
+          });
+        } else {
+          clone.addEventListener('click', () => {
+            clone.style.opacity = '0';
+            setTimeout(() => clone.remove(), 300);
+          });
+          clone.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            clone.style.opacity = '0';
+            setTimeout(() => clone.remove(), 300);
+          });
+        }
+        
+        document.body.appendChild(clone);
+        cloneButtons.push(clone);
+      }
+      
+      noBtn.style.display = 'none';
+    }
+
+    function stopCloneMode() {
+      cloneMode = false;
+      cloneButtons.forEach(btn => btn.remove());
+      cloneButtons = [];
+      noBtn.style.display = 'block';
+      noBtn.style.transform = 'scale(1)';
+      noBtn.style.opacity = '1';
+      noBtn.style.animation = 'none';
+    }
+
+    function startDVDMode(speed) {
       dvdMode = true;
+      dvdSpeedX = speed;
+      dvdSpeedY = speed;
       noBtn.classList.add('bouncing');
       
       const noRect = noBtn.getBoundingClientRect();
@@ -475,6 +610,7 @@
 
     noBtn.addEventListener('touchstart', (e) => {
       e.preventDefault();
+      if (moleMode || cloneMode) return;
       const now = Date.now();
       if ((now - lastTriggerTime) > 400) {
         lastTriggerTime = now;
@@ -484,6 +620,7 @@
 
     noBtn.addEventListener('click', (e) => {
       e.preventDefault();
+      if (moleMode || cloneMode) return;
       const now = Date.now();
       if ((now - lastTriggerTime) > 400) {
         lastTriggerTime = now;
@@ -493,7 +630,11 @@
 
     yesBtn.addEventListener('click', () => {
       dvdMode = false;
+      moleMode = false;
+      cloneMode = false;
       if (animationFrame) cancelAnimationFrame(animationFrame);
+      if (moleInterval) clearInterval(moleInterval);
+      cloneButtons.forEach(btn => btn.remove());
 
       if (navigator.vibrate) {
         navigator.vibrate([200, 100, 200, 100, 200]);
