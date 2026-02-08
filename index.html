@@ -19,13 +19,13 @@
       --card-bg: #ffffff;
       --canvas-bg: #f9f4f7;
     }
-
+    
     * { 
       box-sizing: border-box; 
       margin: 0;
       padding: 0;
     }
-
+    
     body {
       min-height: 100vh;
       width: 100vw;
@@ -40,7 +40,7 @@
       top: 0;
       left: 0;
     }
-
+    
     .card {
       width: 90vw;
       max-width: 500px;
@@ -52,31 +52,31 @@
       position: relative;
       z-index: 10;
     }
-
- .gif-container {
-  width: 88vw;
-  max-width: 360px;
-  height: 220px;
-  background: var(--canvas-bg);
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  border: 3px solid #f0eaed;
-  box-shadow: inset 0 2px 8px rgba(0,0,0,0.03);
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-bottom: 28px;
-}
-
+    
+    .gif-container {
+      width: 88vw;
+      max-width: 360px;
+      height: 220px;
+      background: var(--canvas-bg);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border: 3px solid #f0eaed;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.03);
+      position: relative;
+      left: 50%;
+      transform: translateX(-50%);
+      margin-bottom: 28px;
+    }
+    
     .character-img {
       max-width: 100%;
       max-height: 100%;
       object-fit: contain;
     }
-
+    
     h1 {
       font-size: clamp(1.6rem, 4.5vw, 2.2rem);
       margin: 18px 0 12px;
@@ -84,7 +84,7 @@
       font-weight: 700;
       letter-spacing: -0.4px;
     }
-
+    
     #subtitle {
       font-size: clamp(1.15rem, 3.8vw, 1.4rem);
       color: var(--text-sub);
@@ -95,7 +95,7 @@
       font-weight: 500;
       line-height: 1.4;
     }
-
+    
     .btn-container {
       display: flex;
       justify-content: center;
@@ -104,7 +104,7 @@
       min-height: 110px;
       position: relative;
     }
-
+    
     button {
       padding: 18px 42px;
       font-size: 19px;
@@ -117,7 +117,7 @@
       box-shadow: 0 5px 18px rgba(0,0,0,0.08);
       letter-spacing: 0.3px;
     }
-
+    
     #yesBtn {
       background: linear-gradient(135deg, var(--yes-color) 0%, #ff6b88 100%);
       color: white;
@@ -125,7 +125,7 @@
       position: relative;
       transform-origin: center center;
     }
-
+    
     #noBtn {
       background-color: var(--no-color);
       color: #666;
@@ -133,28 +133,28 @@
       z-index: 200;
       transition: transform 0.3s ease, opacity 0.3s ease;
     }
-
+    
     #noBtn.bouncing {
       position: fixed;
       transition: none;
       z-index: 200;
     }
-
+    
     #noBtn.mole-mode {
       position: fixed;
       z-index: 200;
     }
-
+    
     #noBtn.hidden {
       opacity: 0;
       pointer-events: none;
     }
-
+    
     @keyframes fadeInOut {
       0%, 100% { opacity: 0.3; }
       50% { opacity: 1; }
     }
-
+    
     .sticker {
       position: fixed;
       width: 120px;
@@ -166,12 +166,12 @@
       transition: opacity 0.7s ease;
       display: none;
     }
-
+    
     #celebration {
       display: none;
       position: relative;
     }
-
+    
     #celebration h1 {
       font-size: clamp(2.3rem, 7.5vw, 3.3rem);
       color: #ff3b7a;
@@ -181,7 +181,7 @@
       text-transform: uppercase;
       letter-spacing: 2px;
     }
-
+    
     #bigYesText {
       position: fixed;
       top: 50%;
@@ -197,7 +197,7 @@
       text-transform: uppercase;
       letter-spacing: 3px;
     }
-
+    
     @keyframes slideInBounce {
       0% { opacity: 0; transform: translate(-50%, -70%) scale(0.3); }
       40% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
@@ -205,12 +205,12 @@
       60% { transform: translate(-50%, -50%) scale(1); }
       100% { opacity: 0; transform: translate(-50%, -30%) scale(0.8); }
     }
-
+    
     @keyframes celebratePulse {
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.08); }
     }
-
+    
     .celebration-gif {
       width: 100%;
       max-width: 380px;
@@ -218,14 +218,14 @@
       margin-top: 22px;
       box-shadow: 0 8px 35px rgba(0,0,0,0.1);
     }
-
+    
     #confettiCanvas {
       position: fixed;
       inset: 0;
       pointer-events: none;
       z-index: 999;
     }
-
+    
     .celebration-sticker {
       position: fixed;
       width: 125px;
@@ -236,12 +236,12 @@
       animation: popInSticker 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
       display: none;
     }
-
+    
     @keyframes popInSticker {
       0% { opacity: 0; transform: scale(0) rotate(-180deg); }
       100% { opacity: 1; transform: scale(1) rotate(0deg); }
     }
-
+    
     .clone-button {
       position: fixed;
       padding: 18px 42px;
@@ -264,14 +264,13 @@
   
   <img class="sticker" id="stickerA" src="a.png">
   <img class="sticker" id="stickerB" src="b.png">
-
   <img class="celebration-sticker" id="stickerC" src="c.png" style="top: 18%; left: 6%;">
   <img class="celebration-sticker" id="stickerD" src="d.png" style="top: 12%; right: 6%;">
   <img class="celebration-sticker" id="stickerE" src="e.png" style="bottom: 18%; left: 10%;">
   <img class="celebration-sticker" id="stickerF" src="f.png" style="bottom: 15%; right: 8%;">
-
+  
   <div id="bigYesText" style="display: none;">She Said Yes!!!</div>
-
+  
   <main class="card" id="mainCard">
     <div id="question-content">
       <div class="gif-container">
@@ -280,19 +279,19 @@
       
       <h1>Arya, will you be my valentine?</h1>
       <p id="subtitle">Please say yes ✨</p>
-
+      
       <div class="btn-container" id="btnContainer">
         <button id="yesBtn">Yes</button>
         <button id="noBtn">No</button>
       </div>
     </div>
-
+    
     <div id="celebration">
       <h1>Hell Yeah</h1>
       <img src="https://media1.tenor.com/m/CMAUbqPnTb4AAAAd/gi-hun-in-ho.gif" class="celebration-gif">
     </div>
   </main>
-
+  
   <script>
     const yesBtn = document.getElementById('yesBtn');
     const noBtn = document.getElementById('noBtn');
@@ -301,7 +300,7 @@
     const body = document.body;
     const stickerA = document.getElementById('stickerA');
     const stickerB = document.getElementById('stickerB');
-
+    
     let noCount = 0;
     let yesScale = 1;
     let dvdMode = false;
@@ -312,17 +311,17 @@
     let animationFrame;
     let moleInterval;
     let cloneButtons = [];
-
+    
     const phrases = [
       "OW HELL NAWWW",
       "Did you just click no again!?",
-      "Pleaaaaaaseeeeee",
+      "Pleaaaaaaseeeeee say yes",
       "Are you serious rn",
       "Oh Ma Lord",
       "I'll give you chocolates pleaseee",
       "Comeeeee onnnn",
-      "Try now 😏",
-      "Ab krke dikha",
+      "Ab dekh",
+      "Ab krke dikha 😏",
       "Oww hell naaa",
       "Now? 😎",
       "Are you serious 💔",
@@ -330,7 +329,7 @@
       "PLEASE! I CAN'T LIVE WITHOUT YOU",
       "What you gonna do now? Hah 😙"
     ];
-
+    
     const gifUrls = {
       1: "https://media1.tenor.com/m/TRxTAkbe39QAAAAd/oh-hell-nah-no.gif",
       2: "https://media1.tenor.com/m/z4ukCIqmzR8AAAAd/omg-what.gif",
@@ -348,7 +347,7 @@
       14: "https://media1.tenor.com/m/wk8ueqUDJBsAAAAC/cat-cry-cute.gif",
       15: "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExNDgwb3VtM3VoNGl4aTZwcWJlcG90czFnYXJtZXBrOGVxanRvZXM1ayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/78XCFBGOlS6keY1Bil/giphy.gif"
     };
-
+    
     function playPopSound() {
       try {
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -368,7 +367,7 @@
         oscillator.stop(audioContext.currentTime + 0.15);
       } catch(e) {}
     }
-
+    
     function handleNo(event) {
       noCount++;
       
@@ -381,11 +380,11 @@
       if (noCount <= phrases.length) {
         subtitle.innerText = phrases[noCount - 1];
       }
-
+      
       if (gifUrls[noCount]) {
         mainImg.src = gifUrls[noCount];
       }
-
+      
       if (noCount <= 6) {
         yesScale += 0.15;
         yesBtn.style.transform = `scale(${yesScale})`;
@@ -393,7 +392,7 @@
         yesScale += 0.3;
         yesBtn.style.transform = `scale(${yesScale})`;
       }
-
+      
       switch(noCount) {
         case 3:
           showStickerA();
@@ -440,12 +439,12 @@
           dvdSpeedY = 20;
           break;
       }
-
+      
       if (!dvdMode && !moleMode && !cloneMode && noCount < 8) {
         moveNoButtonRandomly();
       }
     }
-
+    
     function showStickerA() {
       const yesRect = yesBtn.getBoundingClientRect();
       stickerA.style.display = 'block';
@@ -453,7 +452,7 @@
       stickerA.style.top = `${yesRect.top - 18}px`;
       stickerA.style.opacity = "1";
     }
-
+    
     function showStickerB(event) {
       let clickX, clickY;
       if (event.clientX !== undefined) {
@@ -473,19 +472,17 @@
       stickerB.style.top = `${clickY - 60}px`;
       stickerB.style.opacity = "1";
     }
-
+    
     function moveNoButtonRandomly() {
       const maxX = window.innerWidth - noBtn.offsetWidth - 20;
       const maxY = window.innerHeight - noBtn.offsetHeight - 20;
-
       const randomX = Math.floor(Math.random() * maxX) + 10;
       const randomY = Math.floor(Math.random() * maxY) + 10;
-
       noBtn.style.position = 'fixed';
       noBtn.style.left = randomX + 'px';
       noBtn.style.top = randomY + 'px';
     }
-
+    
     function startMoleMode() {
       moleMode = true;
       noBtn.classList.add('mole-mode');
@@ -505,13 +502,13 @@
         }, 100);
       }, 900);
     }
-
+    
     function stopMoleMode() {
       moleMode = false;
       if (moleInterval) clearInterval(moleInterval);
       noBtn.classList.remove('mole-mode', 'hidden');
     }
-
+    
     function startCloneMode() {
       cloneMode = true;
       
@@ -559,7 +556,7 @@
       
       noBtn.style.display = 'none';
     }
-
+    
     function stopCloneMode() {
       cloneMode = false;
       cloneButtons.forEach(btn => btn.remove());
@@ -569,7 +566,7 @@
       noBtn.style.opacity = '1';
       noBtn.style.animation = 'none';
     }
-
+    
     function startDVDMode(speed) {
       dvdMode = true;
       dvdSpeedX = speed;
@@ -579,21 +576,20 @@
       const noRect = noBtn.getBoundingClientRect();
       dvdX = noRect.left;
       dvdY = noRect.top;
-
       animateDVD();
     }
-
+    
     function animateDVD() {
       if (!dvdMode) return;
-
+      
       const btnWidth = noBtn.offsetWidth;
       const btnHeight = noBtn.offsetHeight;
       const maxX = window.innerWidth - btnWidth;
       const maxY = window.innerHeight - btnHeight;
-
+      
       dvdX += dvdSpeedX;
       dvdY += dvdSpeedY;
-
+      
       if (dvdX <= 0 || dvdX >= maxX) {
         dvdSpeedX *= -1;
         dvdX = Math.max(0, Math.min(dvdX, maxX));
@@ -602,35 +598,35 @@
         dvdSpeedY *= -1;
         dvdY = Math.max(0, Math.min(dvdY, maxY));
       }
-
+      
       noBtn.style.left = dvdX + 'px';
       noBtn.style.top = dvdY + 'px';
-
+      
       animationFrame = requestAnimationFrame(animateDVD);
     }
-
+    
     let lastTriggerTime = 0;
-
-noBtn.addEventListener('touchstart', (e) => {
-  e.preventDefault();
-  if (cloneMode) return;
-  const now = Date.now();
-  if ((now - lastTriggerTime) > 400) {
-    lastTriggerTime = now;
-    handleNo(e);
-  }
-});
-
-noBtn.addEventListener('click', (e) => {
-  e.preventDefault();
-  if (cloneMode) return;
-  const now = Date.now();
-  if ((now - lastTriggerTime) > 400) {
-    lastTriggerTime = now;
-    handleNo(e);
-  }
-});
-
+    
+    noBtn.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      if (cloneMode) return;
+      const now = Date.now();
+      if ((now - lastTriggerTime) > 400) {
+        lastTriggerTime = now;
+        handleNo(e);
+      }
+    });
+    
+    noBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (cloneMode) return;
+      const now = Date.now();
+      if ((now - lastTriggerTime) > 400) {
+        lastTriggerTime = now;
+        handleNo(e);
+      }
+    });
+    
     yesBtn.addEventListener('click', () => {
       dvdMode = false;
       moleMode = false;
@@ -638,31 +634,31 @@ noBtn.addEventListener('click', (e) => {
       if (animationFrame) cancelAnimationFrame(animationFrame);
       if (moleInterval) clearInterval(moleInterval);
       cloneButtons.forEach(btn => btn.remove());
-
+      
       if (navigator.vibrate) {
         navigator.vibrate([200, 100, 200, 100, 200]);
       }
-
+      
       document.getElementById('question-content').style.display = 'none';
       document.getElementById('celebration').style.display = 'block';
       noBtn.style.display = 'none';
       body.style.backgroundColor = "#faf5f8";
-
+      
       const bigText = document.getElementById('bigYesText');
       bigText.style.display = 'block';
-
+      
       confetti({
         particleCount: 200,
         spread: 80,
         origin: { y: 0.6 },
         colors: ['#ff9ebc', '#ffb3cc', '#ffc8d9', '#ff85ab']
       });
-
+      
       setTimeout(() => { stickerC.style.display = 'block'; stickerC.style.opacity = '1'; }, 400);
       setTimeout(() => { stickerD.style.display = 'block'; stickerD.style.opacity = '1'; }, 700);
       setTimeout(() => { stickerE.style.display = 'block'; stickerE.style.opacity = '1'; }, 1000);
       setTimeout(() => { stickerF.style.display = 'block'; stickerF.style.opacity = '1'; }, 1300);
-
+      
       setInterval(() => {
         confetti({
           particleCount: 80,
