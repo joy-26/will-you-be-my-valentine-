@@ -131,7 +131,7 @@
       color: #666;
       position: relative;
       z-index: 200;
-      transition: transform 0.3s ease, opacity 0.3s ease;
+      transition: transform 0.2s ease, opacity 0.2s ease;
     }
     
     #noBtn.bouncing {
@@ -150,8 +150,12 @@
       pointer-events: none;
     }
     
-    @keyframes fadeInOut {
-      0%, 100% { opacity: 0.3; }
+    #noBtn.blinking {
+      animation: blinkFast 0.4s infinite;
+    }
+    
+    @keyframes blinkFast {
+      0%, 100% { opacity: 0; }
       50% { opacity: 1; }
     }
     
@@ -184,26 +188,15 @@
     
     #bigYesText {
       position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: clamp(2.8rem, 9.5vw, 5.2rem);
+      font-size: clamp(2.5rem, 8.5vw, 4.8rem);
       font-weight: 900;
       color: #ff3b7a;
       z-index: 210;
       opacity: 0;
-      text-shadow: 0 0 28px rgba(255, 59, 122, 0.4);
-      animation: slideInBounce 2.5s ease-in-out infinite;
+      text-shadow: 0 0 25px rgba(255, 59, 122, 0.4);
       text-transform: uppercase;
       letter-spacing: 3px;
-    }
-    
-    @keyframes slideInBounce {
-      0% { opacity: 0; transform: translate(-50%, -70%) scale(0.3); }
-      40% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
-      50% { transform: translate(-50%, -50%) scale(0.95); }
-      60% { transform: translate(-50%, -50%) scale(1); }
-      100% { opacity: 0; transform: translate(-50%, -30%) scale(0.8); }
+      transition: all 0.5s ease;
     }
     
     @keyframes celebratePulse {
@@ -256,18 +249,42 @@
       box-shadow: 0 5px 18px rgba(0,0,0,0.08);
       z-index: 199;
       opacity: 0.9;
+      letter-spacing: 0.3px;
+    }
+    
+    .toast {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+      color: white;
+      padding: 15px 30px;
+      border-radius: 50px;
+      font-size: 18px;
+      font-weight: 600;
+      box-shadow: 0 5px 20px rgba(76, 175, 80, 0.4);
+      z-index: 300;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    
+    .toast.show {
+      opacity: 1;
     }
   </style>
 </head>
 <body>
   <canvas id="confettiCanvas"></canvas>
   
+  <div id="toast" class="toast">Oh you got it! 🎉</div>
+  
   <img class="sticker" id="stickerA" src="a.png">
   <img class="sticker" id="stickerB" src="b.png">
-  <img class="celebration-sticker" id="stickerC" src="c.png" style="top: 18%; left: 6%;">
-  <img class="celebration-sticker" id="stickerD" src="d.png" style="top: 12%; right: 6%;">
-  <img class="celebration-sticker" id="stickerE" src="e.png" style="bottom: 18%; left: 10%;">
-  <img class="celebration-sticker" id="stickerF" src="f.png" style="bottom: 15%; right: 8%;">
+  <img class="celebration-sticker" id="stickerC" src="c.png" style="top: 28%; left: 12%;">
+  <img class="celebration-sticker" id="stickerD" src="d.png" style="top: 25%; right: 12%;">
+  <img class="celebration-sticker" id="stickerE" src="e.png" style="bottom: 28%; left: 15%;">
+  <img class="celebration-sticker" id="stickerF" src="f.png" style="bottom: 25%; right: 14%;">
   
   <div id="bigYesText" style="display: none;">She Said Yes!!!</div>
   
@@ -300,6 +317,8 @@
     const body = document.body;
     const stickerA = document.getElementById('stickerA');
     const stickerB = document.getElementById('stickerB');
+    const toast = document.getElementById('toast');
+    const bigYesText = document.getElementById('bigYesText');
     
     let noCount = 0;
     let yesScale = 1;
@@ -311,6 +330,7 @@
     let animationFrame;
     let moleInterval;
     let cloneButtons = [];
+    let yesTextInterval;
     
     const phrases = [
       "OW HELL NAWWW",
@@ -348,34 +368,18 @@
       15: "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExNDgwb3VtM3VoNGl4aTZwcWJlcG90czFnYXJtZXBrOGVxanRvZXM1ayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/78XCFBGOlS6keY1Bil/giphy.gif"
     };
     
-    function playPopSound() {
-      try {
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-        
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-        
-        oscillator.frequency.value = 900;
-        oscillator.type = 'sine';
-        
-        gainNode.gain.setValueAtTime(0.4, audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
-        
-        oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + 0.15);
-      } catch(e) {}
+    function vibrate() {
+      if (navigator.vibrate) {
+        try {
+          navigator.vibrate(50);
+        } catch(e) {}
+      }
     }
     
     function handleNo(event) {
       noCount++;
       
-      playPopSound();
-      
-      if (navigator.vibrate) {
-        navigator.vibrate(50);
-      }
+      vibrate();
       
       if (noCount <= phrases.length) {
         subtitle.innerText = phrases[noCount - 1];
@@ -407,18 +411,19 @@
           startMoleMode();
           break;
         case 9:
-          noBtn.style.transform = 'scale(0.7)';
           stopMoleMode();
-          moveNoButtonRandomly();
+          noBtn.style.transform = 'scale(0.35)';
+          noBtn.style.opacity = '0.4';
+          moveNoButtonToFarCorner();
           break;
         case 10:
-          noBtn.style.opacity = '0.5';
-          noBtn.style.animation = 'fadeInOut 1.5s infinite';
+          noBtn.classList.add('blinking');
+          noBtn.style.opacity = '1';
+          moveNoButtonRandomly();
           body.style.backgroundColor = "#ffd6dd";
           break;
         case 11:
-          noBtn.style.animation = 'none';
-          noBtn.style.opacity = '1';
+          noBtn.classList.remove('blinking');
           startCloneMode();
           break;
         case 12:
@@ -426,12 +431,12 @@
           startDVDMode(5);
           break;
         case 13:
-          dvdSpeedX = 7;
-          dvdSpeedY = 7;
+          dvdSpeedX = 6;
+          dvdSpeedY = 6;
           break;
         case 14:
-          dvdSpeedX = 9;
-          dvdSpeedY = 9;
+          dvdSpeedX = 7;
+          dvdSpeedY = 7;
           body.style.backgroundColor = "#ffc5d0";
           break;
         case 15:
@@ -483,6 +488,19 @@
       noBtn.style.top = randomY + 'px';
     }
     
+    function moveNoButtonToFarCorner() {
+      const corners = [
+        { x: 10, y: 10 },
+        { x: window.innerWidth - noBtn.offsetWidth - 10, y: 10 },
+        { x: 10, y: window.innerHeight - noBtn.offsetHeight - 10 },
+        { x: window.innerWidth - noBtn.offsetWidth - 10, y: window.innerHeight - noBtn.offsetHeight - 10 }
+      ];
+      const corner = corners[Math.floor(Math.random() * corners.length)];
+      noBtn.style.position = 'fixed';
+      noBtn.style.left = corner.x + 'px';
+      noBtn.style.top = corner.y + 'px';
+    }
+    
     function startMoleMode() {
       moleMode = true;
       noBtn.classList.add('mole-mode');
@@ -509,15 +527,23 @@
       noBtn.classList.remove('mole-mode', 'hidden');
     }
     
+    function showToast() {
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2000);
+    }
+    
     function startCloneMode() {
       cloneMode = true;
       
       cloneButtons.forEach(btn => btn.remove());
       cloneButtons = [];
       
-      const realIndex = Math.floor(Math.random() * 3);
+      const numClones = 6;
+      const realIndex = Math.floor(Math.random() * numClones);
       
-      for (let i = 0; i < 3; i++) {
+      for (let i = 0; i < numClones; i++) {
         const clone = document.createElement('button');
         clone.textContent = 'No';
         clone.className = 'clone-button';
@@ -532,21 +558,25 @@
         
         if (i === realIndex) {
           clone.addEventListener('click', (e) => {
-            handleNo(e);
+            showToast();
+            setTimeout(() => handleNo(e), 500);
           });
           clone.addEventListener('touchstart', (e) => {
             e.preventDefault();
-            handleNo(e);
+            showToast();
+            setTimeout(() => handleNo(e), 500);
           });
         } else {
           clone.addEventListener('click', () => {
             clone.style.opacity = '0';
             setTimeout(() => clone.remove(), 300);
+            cloneButtons = cloneButtons.filter(b => b !== clone);
           });
           clone.addEventListener('touchstart', (e) => {
             e.preventDefault();
             clone.style.opacity = '0';
             setTimeout(() => clone.remove(), 300);
+            cloneButtons = cloneButtons.filter(b => b !== clone);
           });
         }
         
@@ -564,7 +594,6 @@
       noBtn.style.display = 'block';
       noBtn.style.transform = 'scale(1)';
       noBtn.style.opacity = '1';
-      noBtn.style.animation = 'none';
     }
     
     function startDVDMode(speed) {
@@ -605,13 +634,29 @@
       animationFrame = requestAnimationFrame(animateDVD);
     }
     
+    function moveYesText() {
+      const maxX = window.innerWidth - 400;
+      const maxY = window.innerHeight - 200;
+      const randomX = Math.floor(Math.random() * maxX) + 50;
+      const randomY = Math.floor(Math.random() * maxY) + 50;
+      
+      bigYesText.style.left = randomX + 'px';
+      bigYesText.style.top = randomY + 'px';
+      bigYesText.style.transform = 'none';
+      
+      bigYesText.style.opacity = '1';
+      setTimeout(() => {
+        bigYesText.style.opacity = '0';
+      }, 1500);
+    }
+    
     let lastTriggerTime = 0;
     
     noBtn.addEventListener('touchstart', (e) => {
       e.preventDefault();
       if (cloneMode) return;
       const now = Date.now();
-      if ((now - lastTriggerTime) > 400) {
+      if ((now - lastTriggerTime) > 300) {
         lastTriggerTime = now;
         handleNo(e);
       }
@@ -621,7 +666,7 @@
       e.preventDefault();
       if (cloneMode) return;
       const now = Date.now();
-      if ((now - lastTriggerTime) > 400) {
+      if ((now - lastTriggerTime) > 300) {
         lastTriggerTime = now;
         handleNo(e);
       }
@@ -635,8 +680,10 @@
       if (moleInterval) clearInterval(moleInterval);
       cloneButtons.forEach(btn => btn.remove());
       
+      vibrate();
       if (navigator.vibrate) {
-        navigator.vibrate([200, 100, 200, 100, 200]);
+        setTimeout(() => vibrate(), 150);
+        setTimeout(() => vibrate(), 300);
       }
       
       document.getElementById('question-content').style.display = 'none';
@@ -644,8 +691,9 @@
       noBtn.style.display = 'none';
       body.style.backgroundColor = "#faf5f8";
       
-      const bigText = document.getElementById('bigYesText');
-      bigText.style.display = 'block';
+      bigYesText.style.display = 'block';
+      moveYesText();
+      yesTextInterval = setInterval(moveYesText, 2500);
       
       confetti({
         particleCount: 200,
