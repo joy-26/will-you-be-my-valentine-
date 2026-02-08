@@ -12,7 +12,7 @@
       --bg-frustrated-1: #ffe8ec;
       --bg-frustrated-2: #ffd6dd;
       --bg-frustrated-3: #ffc5d0;
-      --yes-color: #ff9ebc;
+      --yes-color: #ef476f;
       --no-color: #f5f5f5;
       --text-main: #1a1a1a;
       --text-sub: #666;
@@ -27,7 +27,8 @@
     }
 
     body {
-      min-height: 100svh;
+      min-height: 100vh;
+      width: 100vw;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -35,32 +36,36 @@
       transition: background-color 1s ease;
       font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
       overflow: hidden;
+      position: fixed;
+      top: 0;
+      left: 0;
     }
 
     .card {
-      width: 96vw;
-      max-width: 650px;
+      width: 90vw;
+      max-width: 500px;
       background: var(--card-bg);
-      padding: 40px 25px;
-      border-radius: 30px;
+      padding: 35px 25px;
+      border-radius: 28px;
       text-align: center;
-      box-shadow: 0 15px 60px rgba(0,0,0,0.06);
+      box-shadow: 0 12px 50px rgba(0,0,0,0.06);
       position: relative;
       z-index: 10;
+      margin: 0 auto;
     }
 
     .gif-container {
-      width: min(380px, 90vw);
-      height: 260px;
-      margin: 0 auto 30px;
+      width: min(340px, 85vw);
+      height: 200px;
+      margin: 0 auto 28px;
       background: var(--canvas-bg);
-      border-radius: 24px;
+      border-radius: 20px;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
       border: 3px solid #f0eaed;
-      box-shadow: inset 0 2px 10px rgba(0,0,0,0.03);
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.03);
     }
 
     .character-img {
@@ -70,18 +75,18 @@
     }
 
     h1 {
-      font-size: clamp(1.8rem, 5vw, 2.4rem);
-      margin: 20px 0 15px;
+      font-size: clamp(1.6rem, 4.5vw, 2.2rem);
+      margin: 18px 0 12px;
       color: var(--text-main);
       font-weight: 700;
-      letter-spacing: -0.5px;
+      letter-spacing: -0.4px;
     }
 
     #subtitle {
-      font-size: clamp(1.25rem, 4vw, 1.5rem);
+      font-size: clamp(1.15rem, 3.8vw, 1.4rem);
       color: var(--text-sub);
       min-height: 2em;
-      margin-bottom: 35px;
+      margin-bottom: 32px;
       font-style: italic;
       font-weight: 500;
       line-height: 1.4;
@@ -91,28 +96,28 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 25px;
-      min-height: 120px;
+      gap: 22px;
+      min-height: 110px;
       position: relative;
     }
 
     button {
-      padding: 20px 45px;
-      font-size: 20px;
+      padding: 18px 42px;
+      font-size: 19px;
       font-weight: 700;
       border: none;
-      border-radius: 60px;
+      border-radius: 55px;
       cursor: pointer;
       transition: all 0.3s ease;
       touch-action: manipulation;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      box-shadow: 0 5px 18px rgba(0,0,0,0.08);
       letter-spacing: 0.3px;
     }
 
     #yesBtn {
-      background: linear-gradient(135deg, var(--yes-color) 0%, #ffb3cc 100%);
+      background: linear-gradient(135deg, var(--yes-color) 0%, #ff6b88 100%);
       color: white;
-      z-index: 100;
+      z-index: 50;
       position: relative;
       transform-origin: center center;
     }
@@ -121,21 +126,22 @@
       background-color: var(--no-color);
       color: #666;
       position: relative;
-      z-index: 90;
+      z-index: 200;
     }
 
     #noBtn.bouncing {
       position: fixed;
       transition: none;
+      z-index: 200;
     }
 
     .sticker {
       position: fixed;
-      width: 130px;
-      height: 130px;
+      width: 120px;
+      height: 120px;
       pointer-events: none;
       opacity: 0 !important;
-      z-index: 50;
+      z-index: 40;
       object-fit: contain;
       transition: opacity 0.7s ease;
       display: none;
@@ -147,9 +153,9 @@
     }
 
     #celebration h1 {
-      font-size: clamp(2.5rem, 8vw, 3.5rem);
+      font-size: clamp(2.3rem, 7.5vw, 3.3rem);
       color: #ff3b7a;
-      margin-bottom: 25px;
+      margin-bottom: 22px;
       animation: celebratePulse 1.2s ease-in-out infinite;
       font-weight: 900;
       text-transform: uppercase;
@@ -161,12 +167,12 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: clamp(3rem, 10vw, 5.5rem);
+      font-size: clamp(2.8rem, 9.5vw, 5.2rem);
       font-weight: 900;
       color: #ff3b7a;
-      z-index: 200;
+      z-index: 210;
       opacity: 0;
-      text-shadow: 0 0 30px rgba(255, 59, 122, 0.4);
+      text-shadow: 0 0 28px rgba(255, 59, 122, 0.4);
       animation: slideInBounce 2.5s ease-in-out infinite;
       text-transform: uppercase;
       letter-spacing: 3px;
@@ -187,10 +193,10 @@
 
     .celebration-gif {
       width: 100%;
-      max-width: 400px;
-      border-radius: 24px;
-      margin-top: 25px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      max-width: 380px;
+      border-radius: 22px;
+      margin-top: 22px;
+      box-shadow: 0 8px 35px rgba(0,0,0,0.1);
     }
 
     #confettiCanvas {
@@ -202,11 +208,11 @@
 
     .celebration-sticker {
       position: fixed;
-      width: 130px;
-      height: 130px;
+      width: 125px;
+      height: 125px;
       object-fit: contain;
       opacity: 0;
-      z-index: 150;
+      z-index: 160;
       animation: popInSticker 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
       display: none;
     }
@@ -223,14 +229,12 @@
   <img class="sticker" id="stickerA" src="a.png">
   <img class="sticker" id="stickerB" src="b.png">
 
-  <img class="celebration-sticker" id="stickerC" src="c.png" style="top: 20%; left: 8%;">
-  <img class="celebration-sticker" id="stickerD" src="d.png" style="top: 15%; right: 8%;">
-  <img class="celebration-sticker" id="stickerE" src="e.png" style="bottom: 20%; left: 12%;">
-  <img class="celebration-sticker" id="stickerF" src="f.png" style="bottom: 18%; right: 10%;">
+  <img class="celebration-sticker" id="stickerC" src="c.png" style="top: 18%; left: 6%;">
+  <img class="celebration-sticker" id="stickerD" src="d.png" style="top: 12%; right: 6%;">
+  <img class="celebration-sticker" id="stickerE" src="e.png" style="bottom: 18%; left: 10%;">
+  <img class="celebration-sticker" id="stickerF" src="f.png" style="bottom: 15%; right: 8%;">
 
   <div id="bigYesText" style="display: none;">She Said Yes!!!</div>
-
-  <audio id="celebrationSound" src="crowd-celebration.mp3" preload="auto"></audio>
 
   <main class="card" id="mainCard">
     <div id="question-content">
@@ -261,7 +265,6 @@
     const body = document.body;
     const stickerA = document.getElementById('stickerA');
     const stickerB = document.getElementById('stickerB');
-    const celebrationSound = document.getElementById('celebrationSound');
 
     let noCount = 0;
     let yesScale = 1;
@@ -298,7 +301,7 @@
       7: "https://media.tenor.com/UNaQFutfOF0AAAAj/banana-crying-cat.gif",
       8: "https://media1.tenor.com/m/V36VabT3tXAAAAAd/why-are-you-serious.gif",
       9: "https://images.meme-arsenal.com/71c0e0900d585e65a5acbd5e47d83cbb.jpg",
-      10: "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExcGRuMGs0ZnUyc2JjeHN4amc5bDJtd3BodHR5ZmR2MHpleThpem0xbyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/m8fyrgnXwXV5EHw6Lm/giphy.gif	",
+      10: "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExcGRuMGs0ZnUyc2JjeHN4amc5bDJtd3BodHR5ZmR2MHpleThpem0xbyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/m8fyrgnXwXV5EHw6Lm/giphy.gif",
       11: "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExNnlqMGt5eGNiOW9nNG92eTkwaHZjMWt2ODkza2RkdHFobnhpdDVsNCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/43wR1f8QU9KApWKjYt/giphy.gif",
       12: "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExZHh4djVlaDBvMDFvMXR5dmM1ZDR4NnQwbjAyenI3YTBmMnJjNTY4MSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3orieTfp1MeFLiBQR2/giphy.gif",
       13: "https://media1.tenor.com/m/gYw4XiQtMsUAAAAd/really-bruh.gif",
@@ -307,21 +310,25 @@
     };
 
     function playPopSound() {
-      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      const oscillator = audioContext.createOscillator();
-      const gainNode = audioContext.createGain();
-      
-      oscillator.connect(gainNode);
-      gainNode.connect(audioContext.destination);
-      
-      oscillator.frequency.value = 800;
-      oscillator.type = 'sine';
-      
-      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
-      
-      oscillator.start(audioContext.currentTime);
-      oscillator.stop(audioContext.currentTime + 0.1);
+      try {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.value = 900;
+        oscillator.type = 'sine';
+        
+        gainNode.gain.setValueAtTime(0.4, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.15);
+      } catch(e) {
+        console.log('Sound not supported');
+      }
     }
 
     function handleNo(event) {
@@ -341,11 +348,11 @@
         mainImg.src = gifUrls[noCount];
       }
 
-      if (yesScale < 3) {
-        yesScale += 0.4;
+      if (noCount <= 6) {
+        yesScale += 0.15;
         yesBtn.style.transform = `scale(${yesScale})`;
-      } else if (yesScale < 6) {
-        yesScale += 0.3;
+      } else if (yesScale < 4.5) {
+        yesScale += 0.35;
         yesBtn.style.transform = `scale(${yesScale})`;
       }
 
@@ -390,8 +397,8 @@
     function showStickerA() {
       const yesRect = yesBtn.getBoundingClientRect();
       stickerA.style.display = 'block';
-      stickerA.style.left = `${yesRect.right + 10}px`;
-      stickerA.style.top = `${yesRect.top - 20}px`;
+      stickerA.style.left = `${yesRect.right + 8}px`;
+      stickerA.style.top = `${yesRect.top - 18}px`;
       stickerA.style.opacity = "1";
     }
 
@@ -410,8 +417,8 @@
       }
       
       stickerB.style.display = 'block';
-      stickerB.style.left = `${clickX - 65}px`;
-      stickerB.style.top = `${clickY - 65}px`;
+      stickerB.style.left = `${clickX - 60}px`;
+      stickerB.style.top = `${clickY - 60}px`;
       stickerB.style.opacity = "1";
     }
 
@@ -499,8 +506,6 @@
 
       const bigText = document.getElementById('bigYesText');
       bigText.style.display = 'block';
-
-      celebrationSound.play().catch(err => console.log("Audio autoplay prevented"));
 
       confetti({
         particleCount: 200,
