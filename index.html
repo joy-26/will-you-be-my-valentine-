@@ -54,19 +54,21 @@
     }
 
     .gif-container {
-      width: 360px;
-      max-width: 88vw;
-      height: 220px;
-      margin: 0 auto 28px;
-      background: var(--canvas-bg);
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      border: 3px solid #f0eaed;
-      box-shadow: inset 0 2px 8px rgba(0,0,0,0.03);
-    }
+  width: 88vw;
+  max-width: 360px;
+  height: 220px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 28px;
+  background: var(--canvas-bg);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 3px solid #f0eaed;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.03);
+}
 
     .character-img {
       max-width: 100%;
@@ -500,7 +502,7 @@
           noBtn.style.top = randomY + 'px';
           noBtn.classList.remove('hidden');
         }, 100);
-      }, 400);
+      }, 900);
     }
 
     function stopMoleMode() {
