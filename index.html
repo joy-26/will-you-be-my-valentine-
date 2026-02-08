@@ -314,14 +314,14 @@
     let cloneButtons = [];
 
     const phrases = [
-      "WHAAAT!?",
-      "Come on!!",
-      "Pleaaaseeee!",
-      "I'll take care of you",
-      "I will get you MacD fries",
-      "I'll give you chocolatesss",
-      "You're just enjoying this aren't you?",
-      "Let's see how much you can deny 😏",
+      "OW HELL NAWWW",
+      "Did you just click no again!?",
+      "Pleaaaaaaseeeeee",
+      "Are you serious rn",
+      "Oh Ma Lord",
+      "I'll give you chocolates pleaseee",
+      "Comeeeee onnnn",
+      "Try now 😏",
       "Ab krke dikha",
       "Oww hell naaa",
       "Now? 😎",
@@ -611,25 +611,25 @@
 
     let lastTriggerTime = 0;
 
-    noBtn.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      if (moleMode || cloneMode) return;
-      const now = Date.now();
-      if ((now - lastTriggerTime) > 400) {
-        lastTriggerTime = now;
-        handleNo(e);
-      }
-    });
+noBtn.addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  if (cloneMode) return;
+  const now = Date.now();
+  if ((now - lastTriggerTime) > 400) {
+    lastTriggerTime = now;
+    handleNo(e);
+  }
+});
 
-    noBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      if (moleMode || cloneMode) return;
-      const now = Date.now();
-      if ((now - lastTriggerTime) > 400) {
-        lastTriggerTime = now;
-        handleNo(e);
-      }
-    });
+noBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  if (cloneMode) return;
+  const now = Date.now();
+  if ((now - lastTriggerTime) > 400) {
+    lastTriggerTime = now;
+    handleNo(e);
+  }
+});
 
     yesBtn.addEventListener('click', () => {
       dvdMode = false;
